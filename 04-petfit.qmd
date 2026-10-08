@@ -1,0 +1,50 @@
+---
+title: "4. Kinetic modelling with PETFit"
+---
+
+[PETFit](https://github.com/mathesong/petfit) fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models.
+
+If this is a new terminal, set the two variables from [part 3](03-bloodstream.qmd#start-the-app) first:
+
+```bash
+DATA=/neurodesktop-storage/course-material/pet/data/ds004869
+SIF=/neurodesktop-storage/course-material/pet/containers
+```
+
+## Define your regions
+
+PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions.
+
+1. Start the region definition app:
+
+   ```bash
+   cd ~/pet_course
+   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func regiondef --bids_dir /data --derivatives_dir ~/pet_course/derivatives
+   ```
+
+2. Open `http://130.238.147.132:YOUR_PORT/proxy/3838/` in a browser tab.
+3. Define several cortical regions, such as frontal, temporal, parietal, occipital, and cingulate, and several subcortical regions. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the [FreeSurfer cortical parcellation page](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation).
+4. Generate the combined TACs. This takes a couple of minutes, because it combines the TACs for every participant in the dataset.
+5. Stop the app with Ctrl+C.
+
+Your regions and the combined TACs are saved in `~/pet_course/derivatives/petfit`.
+
+## Fit models
+
+1. Start the modelling app. It uses your bloodstream input functions:
+
+   ```bash
+   cd ~/pet_course
+   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func modelling_plasma --bids_dir /data --derivatives_dir ~/pet_course/derivatives --blood_dir ~/pet_course/derivatives/bloodstream
+   ```
+
+2. Open `http://130.238.147.132:YOUR_PORT/proxy/3838/` in a browser tab.
+3. Restrict the analysis to the six workshop participants: `02;05;08;11;13;14`.
+4. Work through the steps in the app, and read the report that each step produces.
+5. Fit the two-tissue compartment model (2TCM) and multilinear analysis 1 (MA1). Both estimate the total distribution volume, *V*~T~.
+
+The reports are in `~/pet_course/derivatives/petfit/Primary_Analysis/reports`. Open them in JupyterLab and click **Trust HTML**.
+
+- Do the models fit the data well?
+- How do the *V*~T~ values compare between the test and retest scans?
+- How do they compare between the baseline and blocked scans? In which regions?

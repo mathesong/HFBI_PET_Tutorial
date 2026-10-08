@@ -1,0 +1,58 @@
+---
+title: "3. Blood data with bloodstream"
+---
+
+[bloodstream](https://github.com/mathesong/bloodstream) models arterial blood data and produces an arterial input function for each PET scan. You choose a model for each blood component in an app, and bloodstream fits the models and writes a report.
+
+## Start the app
+
+To keep the commands short, first save two paths in variables. If you open a new terminal, run these two lines again:
+
+```bash
+DATA=/neurodesktop-storage/course-material/pet/data/ds004869
+SIF=/neurodesktop-storage/course-material/pet/containers
+```
+
+Then start bloodstream:
+
+```bash
+cd ~/pet_course
+apptainer run -B $DATA:/data:ro $SIF/bloodstream.sif --mode interactive --bids_dir /data --derivatives_dir ~/pet_course/derivatives
+```
+
+What the command does:
+
+- `apptainer run ... $SIF/bloodstream.sif` runs the bloodstream container.
+- `-B $DATA:/data:ro` makes the dataset visible inside the container as `/data`, read-only.
+- `--bids_dir /data` tells bloodstream where the BIDS data are.
+- `--derivatives_dir ~/pet_course/derivatives` tells bloodstream where to write its results: your own folder.
+
+You can ignore these messages:
+
+- `INFO: Environment variable SINGULARITYENV_MATLABPATH is set...`
+- `WARNING: While bind mounting '/data:/data': destination is already in the mount point list`
+
+## Open the app
+
+Wait until the terminal shows `Listening on http://0.0.0.0:3838`. Then open a new browser tab with your Neurodesk link, and replace everything after your port number with `/proxy/3838/`:
+
+```
+http://130.238.147.132:YOUR_PORT/proxy/3838/
+```
+
+The final `/` is needed. If the terminal says a different port, such as 3839, use that number instead.
+
+## Build your configuration
+
+1. Restrict the analysis to the six workshop participants: `02;05;08;11;13;14`.
+2. Choose a model for each blood component: the parent fraction, the blood-to-plasma ratio, the arterial input function, and whole blood. What do the options mean, and which would you choose for each?
+3. Run the pipeline from the app.
+
+The run takes several minutes. Its progress appears in the terminal. When it finishes, stop the app with Ctrl+C in the terminal.
+
+## Read the report
+
+The report is `~/pet_course/derivatives/bloodstream/Primary_Analysis/bloodstream_report.html`. Open it in JupyterLab and click **Trust HTML** at the top, which turns on the interactive plots.
+
+- Do the model fits look reasonable for every participant?
+- Look closely at sub-13 `ses-test`. What is different about its blood data, and how might that affect the results?

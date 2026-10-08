@@ -1,0 +1,302 @@
+[
+  {
+    "objectID": "troubleshooting.html",
+    "href": "troubleshooting.html",
+    "title": "Troubleshooting",
+    "section": "",
+    "text": "Problem\nWhat to do\n\n\n\n\nRead-only file system or permission denied\nYou tried to write inside course-material. Write to your home folder, ~/pet_course, instead.\n\n\nThe browser shows an error at /proxy/3838/\nCheck that the app says Listening on, that you used your own port number, and that the address ends with /.\n\n\nThe app says the port is in use and picks another one\nAnother app is still running. Use the new port number, or stop the other app with Ctrl+C.\n\n\nThe plots in a report don’t respond\nClick Trust HTML at the top of the report.\n\n\nYou can’t get bloodstream or PETFit to start\nAs a fallback, run /neurodesktop-storage/course-material/pet/scripts/run_bloodstream.sh, or /neurodesktop-storage/course-material/pet/scripts/run_petfit.sh followed by regiondef, modelling_plasma, or modelling_ref. They run the same command and print the link to open.\n\n\nDATA or SIF seem empty\nYou opened a new terminal. Set the two variables again, as in part 3.\n\n\nezBIDS says Select Directory requires Chrome or Edge, or it shows your laptop’s files\nYou opened ezBIDS in your own browser or in Firefox. Close it, and start it with open_ezbids.sh in a terminal on the Desktop, as in part 1.\n\n\nA page says “Token authentication is enabled”\nThis browser isn’t logged in. Open your full Neurodesk link, with ?token=, in this browser first.\n\n\nThe terminal or the browser stops responding\nThe VPN may have dropped. Reconnect, and open your Neurodesk link again. Your files are kept.",
+    "crumbs": [
+      "Troubleshooting"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PET data analysis workshop",
+    "section": "",
+    "text": "In this workshop, you take PET data from raw files to a pharmacological result:\nYou work in your own Neurodesk session on the course server. Everything you create goes in your home folder. The course data are read-only, so you can’t break anything for anyone else.\nStart with Before you start.",
+    "crumbs": [
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#the-dataset",
+    "href": "index.html#the-dataset",
+    "title": "PET data analysis workshop",
+    "section": "The dataset",
+    "text": "The dataset\nMost of the workshop uses [11C]MC1, a radioligand for cyclooxygenase-2 (COX-2), from OpenNeuro dataset ds004869. It has two groups of healthy participants:\n\n\n\n\n\n\n\n\n\nGroup\nParticipants\nSessions\nScan length\n\n\n\n\nBlocking\nsub-01 to sub-10\nbaseline, and blocked after 600 mg celecoxib, a COX-2 inhibitor\n120 min\n\n\nTest-retest\nsub-11 to sub-27\ntest and retest\n90 min\n\n\n\nEvery scan has arterial blood data: plasma and whole-blood radioactivity, and the parent fraction measured with HPLC.\nIn the workshop, you analyse six participants: sub-02, sub-05, and sub-08 from the blocking group, and sub-11, sub-13, and sub-14 from the test-retest group.\nFor the BIDS conversion in part 1, you use a separate set of raw DICOM files: [11C]PE2I, [18F]FE-PE2I, and [15O]water PET, and a T1-weighted MRI, from two participants.",
+    "crumbs": [
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#further-reading",
+    "href": "index.html#further-reading",
+    "title": "PET data analysis workshop",
+    "section": "Further reading",
+    "text": "Further reading\n\nPET-BIDS specification\nezBIDS for PET (OpenNeuroPET)\nPET2BIDS\nBIDS-Manager tutorial\nPETPrep\nbloodstream\nPETFit\nFreeSurfer cortical parcellation and lobe mapping",
+    "crumbs": [
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "04-petfit.html",
+    "href": "04-petfit.html",
+    "title": "4. Kinetic modelling with PETFit",
+    "section": "",
+    "text": "PETFit fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models.\nIf this is a new terminal, set the two variables from part 3 first:",
+    "crumbs": [
+      "Workshop",
+      "4. PETFit"
+    ]
+  },
+  {
+    "objectID": "04-petfit.html#define-your-regions",
+    "href": "04-petfit.html#define-your-regions",
+    "title": "4. Kinetic modelling with PETFit",
+    "section": "Define your regions",
+    "text": "Define your regions\nPETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions.\n\nStart the region definition app:\ncd ~/pet_course\napptainer run -B $DATA:/data:ro $SIF/petfit.sif --func regiondef --bids_dir /data --derivatives_dir ~/pet_course/derivatives\nOpen http://130.238.147.132:YOUR_PORT/proxy/3838/ in a browser tab.\nDefine several cortical regions, such as frontal, temporal, parietal, occipital, and cingulate, and several subcortical regions. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the FreeSurfer cortical parcellation page.\nGenerate the combined TACs. This takes a couple of minutes, because it combines the TACs for every participant in the dataset.\nStop the app with Ctrl+C.\n\nYour regions and the combined TACs are saved in ~/pet_course/derivatives/petfit.",
+    "crumbs": [
+      "Workshop",
+      "4. PETFit"
+    ]
+  },
+  {
+    "objectID": "04-petfit.html#fit-models",
+    "href": "04-petfit.html#fit-models",
+    "title": "4. Kinetic modelling with PETFit",
+    "section": "Fit models",
+    "text": "Fit models\n\nStart the modelling app. It uses your bloodstream input functions:\ncd ~/pet_course\napptainer run -B $DATA:/data:ro $SIF/petfit.sif --func modelling_plasma --bids_dir /data --derivatives_dir ~/pet_course/derivatives --blood_dir ~/pet_course/derivatives/bloodstream\nOpen http://130.238.147.132:YOUR_PORT/proxy/3838/ in a browser tab.\nRestrict the analysis to the six workshop participants: 02;05;08;11;13;14.\nWork through the steps in the app, and read the report that each step produces.\nFit the two-tissue compartment model (2TCM) and multilinear analysis 1 (MA1). Both estimate the total distribution volume, VT.\n\nThe reports are in ~/pet_course/derivatives/petfit/Primary_Analysis/reports. Open them in JupyterLab and click Trust HTML.\n\nDo the models fit the data well?\nHow do the VT values compare between the test and retest scans?\nHow do they compare between the baseline and blocked scans? In which regions?",
+    "crumbs": [
+      "Workshop",
+      "4. PETFit"
+    ]
+  },
+  {
+    "objectID": "02-petprep.html",
+    "href": "02-petprep.html",
+    "title": "2. PETPrep",
+    "section": "",
+    "text": "PETPrep preprocesses PET data. It corrects for head motion, registers the PET images to the participant’s MRI, and extracts time-activity curves (TACs) from FreeSurfer regions. A full run takes hours per participant, so you look at outputs that have already been computed for this dataset.",
+    "crumbs": [
+      "Workshop",
+      "2. PETPrep"
+    ]
+  },
+  {
+    "objectID": "02-petprep.html#look-at-the-reports",
+    "href": "02-petprep.html#look-at-the-reports",
+    "title": "2. PETPrep",
+    "section": "Look at the reports",
+    "text": "Look at the reports\nPETPrep writes one HTML report per participant. To open a report, run:\n/neurodesktop-storage/course-material/pet/scripts/view_petprep.sh sub-01.html\nThe script prints a link. Open it in a new browser tab. When you are done, press Ctrl+C in the terminal. To see a list of all reports, run the script without a filename.\nThe surface-based analyses (petsurfer) have one report per session:\n/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh sub-01_ses-baseline.html\nWhile you read the reports, think about these questions:\n\nHow would you check that the PET-to-MRI registration worked?\nWhat do the motion estimates tell you?\nWhich outputs would you use for kinetic modelling?",
+    "crumbs": [
+      "Workshop",
+      "2. PETPrep"
+    ]
+  },
+  {
+    "objectID": "02-petprep.html#look-at-the-outputs",
+    "href": "02-petprep.html#look-at-the-outputs",
+    "title": "2. PETPrep",
+    "section": "Look at the outputs",
+    "text": "Look at the outputs\nThe outputs are in ~/pet_course/derivatives/petprep. Open one participant’s folder. For example, find the TAC file sub-01_ses-baseline_desc-preproc_seg-gtm_tacs.tsv and open it in JupyterLab. What do the rows and columns contain?",
+    "crumbs": [
+      "Workshop",
+      "2. PETPrep"
+    ]
+  },
+  {
+    "objectID": "02-petprep.html#try-to-run-petprep",
+    "href": "02-petprep.html#try-to-run-petprep",
+    "title": "2. PETPrep",
+    "section": "Try to run PETPrep",
+    "text": "Try to run PETPrep\nPETPrep is run through a small Python wrapper called petprep-docker. Install it and look at its options:\npip install --user petprep-docker\npetprep-docker --help\nYou can ignore the pip warning that ~/.local/bin isn’t on your PATH.\nNow try to run PETPrep on one participant:\npetprep-docker /neurodesktop-storage/course-material/pet/data/ds004869 ~/pet_course/petprep_test participant --participant-label 01\nIt fails. Read the error message, and then use petprep-docker --help to work out:\n\nWhat is missing, and what would you need to make this run?\nPETPrep runs FreeSurfer, which needs a licence. Which option passes the licence file?\nThis dataset already contains FreeSurfer outputs in derivatives/freesurfer. Which option would let PETPrep reuse them, and why would that help?",
+    "crumbs": [
+      "Workshop",
+      "2. PETPrep"
+    ]
+  },
+  {
+    "objectID": "01-ezbids.html",
+    "href": "01-ezbids.html",
+    "title": "1. Convert data to BIDS with ezBIDS",
+    "section": "",
+    "text": "ezBIDS is a web app that converts raw scanner data, such as DICOM files, to BIDS. It guesses what each scan is and proposes BIDS names, and you check and correct its guesses before it converts the data. For PET, it uses the same converter as PET2BIDS.",
+    "crumbs": [
+      "Workshop",
+      "1. BIDS with ezBIDS"
+    ]
+  },
+  {
+    "objectID": "01-ezbids.html#the-raw-data",
+    "href": "01-ezbids.html#the-raw-data",
+    "title": "1. Convert data to BIDS with ezBIDS",
+    "section": "The raw data",
+    "text": "The raw data\nYou convert DICOM files from two participants, ASPC0230_06 and ASPC0230_07, scanned on a GE Discovery MI PET/CT and a GE SIGNA PET/MR. Each participant has four scans:\n\na T1-weighted MRI\n[11C]PE2I, a dopamine transporter radioligand\n[18F]FE-PE2I, a fluorine-18 version of the same radioligand\n[15O]water, for blood flow\n\nThe data are in /neurodesktop-storage/course-material/pet/data/sourcedata. They stay on the server: you don’t download them.",
+    "crumbs": [
+      "Workshop",
+      "1. BIDS with ezBIDS"
+    ]
+  },
+  {
+    "objectID": "01-ezbids.html#open-ezbids",
+    "href": "01-ezbids.html#open-ezbids",
+    "title": "1. Convert data to BIDS with ezBIDS",
+    "section": "Open ezBIDS",
+    "text": "Open ezBIDS\nezBIDS needs a Chrome-type browser to select a folder, and it must run on the server so that it can see the data. So you open it in Chromium on the Neurodesk Desktop.\n\nIn JupyterLab, open the Launcher tab and open the Desktop.\nOn the Desktop, open a terminal, and type:\n/neurodesktop-storage/course-material/pet/scripts/open_ezbids.sh\nChromium opens with ezBIDS. The first start can take a minute.\n\n\n\n\n\n\n\nWarningNo copy and paste on the Desktop\n\n\n\nCopy and paste doesn’t work on the Desktop, so type the command. Tab completes each part: type /neu, press Tab, type cou, press Tab, and so on.\n\n\nIf the Desktop has a low resolution, open the control panel at the left edge, select settings, and set Scaling mode to Remote resizing.",
+    "crumbs": [
+      "Workshop",
+      "1. BIDS with ezBIDS"
+    ]
+  },
+  {
+    "objectID": "01-ezbids.html#convert-the-data",
+    "href": "01-ezbids.html#convert-the-data",
+    "title": "1. Convert data to BIDS with ezBIDS",
+    "section": "Convert the data",
+    "text": "Convert the data\n\nClick Select Directory, choose /neurodesktop-storage/course-material/pet/data/sourcedata, and allow ezBIDS to view the files. The upload takes a few minutes.\nCheck the information that ezBIDS found about the dataset and the participants.\nGo through the list of scans. For each scan, check the proposed BIDS name, and correct anything that looks wrong.\nAdd the information that the converter can’t find in the DICOM files.\nConvert the data, and save the BIDS dataset. It stays in your Neurodesk.\n\nWhile you work, think about these questions:\n\nHow many participants does ezBIDS think there are? Is it right? What did it base that on?\nFor each PET scan, does the tracer that ezBIDS reports match the scan’s series description?\nWhich information in a PET-BIDS sidecar did the scanner provide, and which did you have to add? What about the injected radioactivity?\nWhere would blood data fit in this dataset?",
+    "crumbs": [
+      "Workshop",
+      "1. BIDS with ezBIDS"
+    ]
+  },
+  {
+    "objectID": "01-ezbids.html#backup-bids-manager",
+    "href": "01-ezbids.html#backup-bids-manager",
+    "title": "1. Convert data to BIDS with ezBIDS",
+    "section": "Backup: BIDS-Manager",
+    "text": "Backup: BIDS-Manager\nIf ezBIDS doesn’t work, use BIDS-Manager instead. It also runs on the Neurodesk Desktop. Its first launch is slow, because it prepares the BIDS schema.\n\nOn the Desktop, open a terminal and run:\n/neurodesktop-storage/course-material/pet/bids-manager/run_bidsmgr.sh\nOn the Home tab, create a new dataset project. Save it in your home folder, for example ~/my_bids. Don’t choose a folder inside course-material, which is read-only.\nPoint BIDS-Manager at the raw data in /neurodesktop-storage/course-material/pet/data/sourcedata.\nScan the raw folder, inspect the proposed names, convert the data, and validate the result.",
+    "crumbs": [
+      "Workshop",
+      "1. BIDS with ezBIDS"
+    ]
+  },
+  {
+    "objectID": "03-bloodstream.html",
+    "href": "03-bloodstream.html",
+    "title": "3. Blood data with bloodstream",
+    "section": "",
+    "text": "bloodstream models arterial blood data and produces an arterial input function for each PET scan. You choose a model for each blood component in an app, and bloodstream fits the models and writes a report.",
+    "crumbs": [
+      "Workshop",
+      "3. bloodstream"
+    ]
+  },
+  {
+    "objectID": "03-bloodstream.html#start-the-app",
+    "href": "03-bloodstream.html#start-the-app",
+    "title": "3. Blood data with bloodstream",
+    "section": "Start the app",
+    "text": "Start the app\nTo keep the commands short, first save two paths in variables. If you open a new terminal, run these two lines again:\nDATA=/neurodesktop-storage/course-material/pet/data/ds004869\nSIF=/neurodesktop-storage/course-material/pet/containers\nThen start bloodstream:\ncd ~/pet_course\napptainer run -B $DATA:/data:ro $SIF/bloodstream.sif --mode interactive --bids_dir /data --derivatives_dir ~/pet_course/derivatives\nWhat the command does:\n\napptainer run ... $SIF/bloodstream.sif runs the bloodstream container.\n-B $DATA:/data:ro makes the dataset visible inside the container as /data, read-only.\n--bids_dir /data tells bloodstream where the BIDS data are.\n--derivatives_dir ~/pet_course/derivatives tells bloodstream where to write its results: your own folder.\n\nYou can ignore these messages:\n\nINFO: Environment variable SINGULARITYENV_MATLABPATH is set...\nWARNING: While bind mounting '/data:/data': destination is already in the mount point list",
+    "crumbs": [
+      "Workshop",
+      "3. bloodstream"
+    ]
+  },
+  {
+    "objectID": "03-bloodstream.html#open-the-app",
+    "href": "03-bloodstream.html#open-the-app",
+    "title": "3. Blood data with bloodstream",
+    "section": "Open the app",
+    "text": "Open the app\nWait until the terminal shows Listening on http://0.0.0.0:3838. Then open a new browser tab with your Neurodesk link, and replace everything after your port number with /proxy/3838/:\nhttp://130.238.147.132:YOUR_PORT/proxy/3838/\nThe final / is needed. If the terminal says a different port, such as 3839, use that number instead.",
+    "crumbs": [
+      "Workshop",
+      "3. bloodstream"
+    ]
+  },
+  {
+    "objectID": "03-bloodstream.html#build-your-configuration",
+    "href": "03-bloodstream.html#build-your-configuration",
+    "title": "3. Blood data with bloodstream",
+    "section": "Build your configuration",
+    "text": "Build your configuration\n\nRestrict the analysis to the six workshop participants: 02;05;08;11;13;14.\nChoose a model for each blood component: the parent fraction, the blood-to-plasma ratio, the arterial input function, and whole blood. What do the options mean, and which would you choose for each?\nRun the pipeline from the app.\n\nThe run takes several minutes. Its progress appears in the terminal. When it finishes, stop the app with Ctrl+C in the terminal.",
+    "crumbs": [
+      "Workshop",
+      "3. bloodstream"
+    ]
+  },
+  {
+    "objectID": "03-bloodstream.html#read-the-report",
+    "href": "03-bloodstream.html#read-the-report",
+    "title": "3. Blood data with bloodstream",
+    "section": "Read the report",
+    "text": "Read the report\nThe report is ~/pet_course/derivatives/bloodstream/Primary_Analysis/bloodstream_report.html. Open it in JupyterLab and click Trust HTML at the top, which turns on the interactive plots.\n\nDo the model fits look reasonable for every participant?\nLook closely at sub-13 ses-test. What is different about its blood data, and how might that affect the results?",
+    "crumbs": [
+      "Workshop",
+      "3. bloodstream"
+    ]
+  },
+  {
+    "objectID": "05-lassen.html",
+    "href": "05-lassen.html",
+    "title": "5. Lassen plot",
+    "section": "",
+    "text": "Celecoxib blocks COX-2. A Lassen plot estimates how much of the target the drug occupies, using VT from the baseline and blocked scans.\nFor each participant and region:\nIf the drug occupies the same fraction of the target in every region, and the non-displaceable distribution volume (VND) is the same in every region, the points fall on a straight line. The slope of the line is the occupancy, and the line crosses the x-axis at VND.",
+    "crumbs": [
+      "Workshop",
+      "5. Lassen plot"
+    ]
+  },
+  {
+    "objectID": "05-lassen.html#your-task",
+    "href": "05-lassen.html#your-task",
+    "title": "5. Lassen plot",
+    "section": "Your task",
+    "text": "Your task\nMake a Lassen plot for each participant in the blocking group, and estimate the occupancy and VND.\n\nUse the VT estimates from 2TCM or MA1.\nPETFit saves the estimates for each model in ~/pet_course/derivatives/petfit/Primary_Analysis, in files that end in _kinpar.tsv. The file at the top of that folder combines all participants and regions.\nWork in a Jupyter notebook: in the Launcher, click Python 3. The pandas and matplotlib packages are installed.",
+    "crumbs": [
+      "Workshop",
+      "5. Lassen plot"
+    ]
+  },
+  {
+    "objectID": "05-lassen.html#questions",
+    "href": "05-lassen.html#questions",
+    "title": "5. Lassen plot",
+    "section": "Questions",
+    "text": "Questions\n\nDo your estimates agree between participants, and between 2TCM and MA1?\nWhich regions fall close to the line, and which don’t? Why might that be?\nWhat assumptions does a Lassen plot make, and are they reasonable here?",
+    "crumbs": [
+      "Workshop",
+      "5. Lassen plot"
+    ]
+  },
+  {
+    "objectID": "setup.html",
+    "href": "setup.html",
+    "title": "Before you start",
+    "section": "",
+    "text": "If your Neurodesk from the fMRI workshop is still running, open its link and skip to Open a terminal.\n\nConnect to the Uppsala University VPN.\nIn a terminal on your laptop, log in to the course server with your Akka ID:\nssh AKKA_ID@130.238.147.132\nStart the course Neurodesk:\nneurodesk_hfbi\nCopy the link that it prints, which starts with http://130.238.147.132:, and open it in your browser. ezBIDS officially supports Chrome and Edge, but Firefox works too.\n\n\n\n\n\n\n\nImportantKeep your link\n\n\n\nThe number after 130.238.147.132: is your personal port number, and you need it later to open the apps. If you lose the link, run neurodesk_hfbi again on the server: if your Neurodesk is already running, it prints the link again without restarting anything.\n\n\nThe link also logs you in. The end of the link, ?token=..., works like a password, and the browser that opens the link remembers it. Use that same browser for the whole workshop. If you open one of the apps in a different browser, you see a page that says “Token authentication is enabled”. To fix it, open your full link in that browser first.",
+    "crumbs": [
+      "Before you start"
+    ]
+  },
+  {
+    "objectID": "setup.html#start-your-neurodesk",
+    "href": "setup.html#start-your-neurodesk",
+    "title": "Before you start",
+    "section": "",
+    "text": "If your Neurodesk from the fMRI workshop is still running, open its link and skip to Open a terminal.\n\nConnect to the Uppsala University VPN.\nIn a terminal on your laptop, log in to the course server with your Akka ID:\nssh AKKA_ID@130.238.147.132\nStart the course Neurodesk:\nneurodesk_hfbi\nCopy the link that it prints, which starts with http://130.238.147.132:, and open it in your browser. ezBIDS officially supports Chrome and Edge, but Firefox works too.\n\n\n\n\n\n\n\nImportantKeep your link\n\n\n\nThe number after 130.238.147.132: is your personal port number, and you need it later to open the apps. If you lose the link, run neurodesk_hfbi again on the server: if your Neurodesk is already running, it prints the link again without restarting anything.\n\n\nThe link also logs you in. The end of the link, ?token=..., works like a password, and the browser that opens the link remembers it. Use that same browser for the whole workshop. If you open one of the apps in a different browser, you see a page that says “Token authentication is enabled”. To fix it, open your full link in that browser first.",
+    "crumbs": [
+      "Before you start"
+    ]
+  },
+  {
+    "objectID": "setup.html#open-a-terminal",
+    "href": "setup.html#open-a-terminal",
+    "title": "Before you start",
+    "section": "Open a terminal",
+    "text": "Open a terminal\nIn JupyterLab, open the Launcher tab and click Terminal. You type most commands in this terminal. Paste with Ctrl+V, or Ctrl+Shift+V if that doesn’t work.",
+    "crumbs": [
+      "Before you start"
+    ]
+  },
+  {
+    "objectID": "setup.html#set-up-your-working-folder",
+    "href": "setup.html#set-up-your-working-folder",
+    "title": "Before you start",
+    "section": "Set up your working folder",
+    "text": "Set up your working folder\nRun the setup script once:\n/neurodesktop-storage/course-material/pet/scripts/setup_pet_course.sh\nThe script creates the folder ~/pet_course/derivatives and copies the PETPrep outputs that you need into it (about 12 MB).\n\n\n\n\n\n\nTipTab completion\n\n\n\nType the first few letters of each part of a path and press Tab to complete it. This saves typing and avoids typos.",
+    "crumbs": [
+      "Before you start"
+    ]
+  }
+]

@@ -1,0 +1,50 @@
+---
+title: "Before you start"
+---
+
+## Start your Neurodesk
+
+If your Neurodesk from the fMRI workshop is still running, open its link and skip to [Open a terminal](#open-a-terminal).
+
+1. Connect to the Uppsala University VPN.
+2. In a terminal on your laptop, log in to the course server with your Akka ID:
+
+   ```bash
+   ssh AKKA_ID@130.238.147.132
+   ```
+
+3. Start the course Neurodesk:
+
+   ```bash
+   neurodesk_hfbi
+   ```
+
+4. Copy the link that it prints, which starts with `http://130.238.147.132:`, and open it in your browser. ezBIDS officially supports Chrome and Edge, but Firefox works too.
+
+::: {.callout-important}
+## Keep your link
+
+The number after `130.238.147.132:` is your personal port number, and you need it later to open the apps. If you lose the link, run `neurodesk_hfbi` again on the server: if your Neurodesk is already running, it prints the link again without restarting anything.
+:::
+
+The link also logs you in. The end of the link, `?token=...`, works like a password, and the browser that opens the link remembers it. Use that same browser for the whole workshop. If you open one of the apps in a different browser, you see a page that says "Token authentication is enabled". To fix it, open your full link in that browser first.
+
+## Open a terminal
+
+In JupyterLab, open the **Launcher** tab and click **Terminal**. You type most commands in this terminal. Paste with Ctrl+V, or Ctrl+Shift+V if that doesn't work.
+
+## Set up your working folder
+
+Run the setup script once:
+
+```bash
+/neurodesktop-storage/course-material/pet/scripts/setup_pet_course.sh
+```
+
+The script creates the folder `~/pet_course/derivatives` and copies the PETPrep outputs that you need into it (about 12 MB).
+
+::: {.callout-tip}
+## Tab completion
+
+Type the first few letters of each part of a path and press Tab to complete it. This saves typing and avoids typos.
+:::

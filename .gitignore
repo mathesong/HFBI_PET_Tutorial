@@ -1,0 +1,11 @@
+# Instructor-only material: keep out of the public repository
+instructor/
+
+# Quarto cache
+/.quarto/
+
+# Editor and OS files
+.DS_Store
+*~
+
+**/*.quarto_ipynb

@@ -1,0 +1,26 @@
+---
+title: "5. Lassen plot"
+---
+
+Celecoxib blocks COX-2. A Lassen plot estimates how much of the target the drug occupies, using *V*~T~ from the baseline and blocked scans.
+
+For each participant and region:
+
+- *x* = *V*~T~ at baseline
+- *y* = *V*~T~ at baseline minus *V*~T~ after blocking
+
+If the drug occupies the same fraction of the target in every region, and the non-displaceable distribution volume (*V*~ND~) is the same in every region, the points fall on a straight line. The slope of the line is the occupancy, and the line crosses the *x*-axis at *V*~ND~.
+
+## Your task
+
+Make a Lassen plot for each participant in the blocking group, and estimate the occupancy and *V*~ND~.
+
+- Use the *V*~T~ estimates from 2TCM or MA1.
+- PETFit saves the estimates for each model in `~/pet_course/derivatives/petfit/Primary_Analysis`, in files that end in `_kinpar.tsv`. The file at the top of that folder combines all participants and regions.
+- Work in a Jupyter notebook: in the **Launcher**, click **Python 3**. The `pandas` and `matplotlib` packages are installed.
+
+## Questions
+
+- Do your estimates agree between participants, and between 2TCM and MA1?
+- Which regions fall close to the line, and which don't? Why might that be?
+- What assumptions does a Lassen plot make, and are they reasonable here?

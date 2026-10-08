@@ -1,0 +1,42 @@
+---
+title: "PET data analysis workshop"
+subtitle: "Human Functional Brain Imaging, PET day, 14 October 2026"
+---
+
+In this workshop, you take PET data from raw files to a pharmacological result:
+
+1. [Convert raw PET data to BIDS](01-ezbids.qmd) with ezBIDS.
+2. [Look at the outputs of PETPrep](02-petprep.qmd), the PET preprocessing pipeline.
+3. [Model the arterial blood data](03-bloodstream.qmd) with bloodstream.
+4. [Fit kinetic models](04-petfit.qmd) to regional time-activity curves with PETFit.
+5. [Estimate drug occupancy](05-lassen.qmd) with a Lassen plot.
+
+You work in your own Neurodesk session on the course server. Everything you create goes in your home folder. The course data are read-only, so you can't break anything for anyone else.
+
+Start with [Before you start](setup.qmd).
+
+## The dataset
+
+Most of the workshop uses [11C]MC1, a radioligand for cyclooxygenase-2 (COX-2), from OpenNeuro dataset [ds004869](https://openneuro.org/datasets/ds004869). It has two groups of healthy participants:
+
+| Group | Participants | Sessions | Scan length |
+| --- | --- | --- | --- |
+| Blocking | sub-01 to sub-10 | `baseline`, and `blocked` after 600 mg celecoxib, a COX-2 inhibitor | 120 min |
+| Test-retest | sub-11 to sub-27 | `test` and `retest` | 90 min |
+
+Every scan has arterial blood data: plasma and whole-blood radioactivity, and the parent fraction measured with HPLC.
+
+In the workshop, you analyse six participants: sub-02, sub-05, and sub-08 from the blocking group, and sub-11, sub-13, and sub-14 from the test-retest group.
+
+For the BIDS conversion in part 1, you use a separate set of raw DICOM files: [11C]PE2I, [18F]FE-PE2I, and [15O]water PET, and a T1-weighted MRI, from two participants.
+
+## Further reading
+
+- [PET-BIDS specification](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/positron-emission-tomography.html)
+- [ezBIDS for PET (OpenNeuroPET)](https://github.com/openneuropet/ezbids_docker)
+- [PET2BIDS](https://github.com/openneuropet/PET2BIDS)
+- [BIDS-Manager tutorial](https://ancplaboldenburg.github.io/bids_manager_documentation/tutorial.html)
+- [PETPrep](https://github.com/nipreps/petprep)
+- [bloodstream](https://github.com/mathesong/bloodstream)
+- [PETFit](https://github.com/mathesong/petfit)
+- [FreeSurfer cortical parcellation and lobe mapping](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation)

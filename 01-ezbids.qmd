@@ -1,0 +1,66 @@
+---
+title: "1. Convert data to BIDS with ezBIDS"
+---
+
+[ezBIDS](https://github.com/openneuropet/ezbids_docker) is a web app that converts raw scanner data, such as DICOM files, to BIDS. It guesses what each scan is and proposes BIDS names, and you check and correct its guesses before it converts the data. For PET, it uses the same converter as [PET2BIDS](https://github.com/openneuropet/PET2BIDS).
+
+## The raw data
+
+You convert DICOM files from two participants, `ASPC0230_06` and `ASPC0230_07`, scanned on a GE Discovery MI PET/CT and a GE SIGNA PET/MR. Each participant has four scans:
+
+- a T1-weighted MRI
+- [11C]PE2I, a dopamine transporter radioligand
+- [18F]FE-PE2I, a fluorine-18 version of the same radioligand
+- [15O]water, for blood flow
+
+The data are in `/neurodesktop-storage/course-material/pet/data/sourcedata`. They stay on the server: you don't download them.
+
+## Open ezBIDS
+
+ezBIDS needs a Chrome-type browser to select a folder, and it must run on the server so that it can see the data. So you open it in Chromium on the Neurodesk Desktop.
+
+1. In JupyterLab, open the **Launcher** tab and open the **Desktop**.
+2. On the Desktop, open a terminal, and type:
+
+   ```bash
+   /neurodesktop-storage/course-material/pet/scripts/open_ezbids.sh
+   ```
+
+3. Chromium opens with ezBIDS. The first start can take a minute.
+
+::: {.callout-warning}
+## No copy and paste on the Desktop
+
+Copy and paste doesn't work on the Desktop, so type the command. Tab completes each part: type `/neu`, press Tab, type `cou`, press Tab, and so on.
+:::
+
+If the Desktop has a low resolution, open the control panel at the left edge, select settings, and set **Scaling mode** to **Remote resizing**.
+
+## Convert the data
+
+1. Click **Select Directory**, choose `/neurodesktop-storage/course-material/pet/data/sourcedata`, and allow ezBIDS to view the files. The upload takes a few minutes.
+2. Check the information that ezBIDS found about the dataset and the participants.
+3. Go through the list of scans. For each scan, check the proposed BIDS name, and correct anything that looks wrong.
+4. Add the information that the converter can't find in the DICOM files.
+5. Convert the data, and save the BIDS dataset. It stays in your Neurodesk.
+
+While you work, think about these questions:
+
+- How many participants does ezBIDS think there are? Is it right? What did it base that on?
+- For each PET scan, does the tracer that ezBIDS reports match the scan's series description?
+- Which information in a PET-BIDS sidecar did the scanner provide, and which did you have to add? What about the injected radioactivity?
+- Where would blood data fit in this dataset?
+
+## Backup: BIDS-Manager
+
+If ezBIDS doesn't work, use BIDS-Manager instead. It also runs on the Neurodesk **Desktop**. Its first launch is slow, because it prepares the BIDS schema.
+
+1. On the Desktop, open a terminal and run:
+
+   ```bash
+   /neurodesktop-storage/course-material/pet/bids-manager/run_bidsmgr.sh
+   ```
+
+2. On the **Home** tab, create a new dataset project. Save it in your home folder, for example `~/my_bids`. Don't choose a folder inside `course-material`, which is read-only.
+3. Point BIDS-Manager at the raw data in `/neurodesktop-storage/course-material/pet/data/sourcedata`.
+4. **Scan** the raw folder, **inspect** the proposed names, **convert** the data, and **validate** the result.
