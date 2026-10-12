@@ -4,7 +4,9 @@ title: "2. PETPrep"
 
 [PETPrep](https://github.com/nipreps/petprep) preprocesses PET data. It corrects for head motion, registers the PET images to the participant's MRI, and extracts time-activity curves (TACs) from FreeSurfer regions. A full run takes hours per participant, so you look at outputs that have already been computed for this dataset.
 
-## Look at the reports
+## 2.1 Look at the PETPrep outputs
+
+### The reports
 
 PETPrep writes one HTML report per participant. To open a report, run:
 
@@ -14,25 +16,19 @@ PETPrep writes one HTML report per participant. To open a report, run:
 
 The script prints a link. Open it in a new browser tab. When you are done, press Ctrl+C in the terminal. To see a list of all reports, run the script without a filename.
 
-The surface-based analyses (petsurfer) have one report per session:
-
-```bash
-/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh sub-01_ses-baseline.html
-```
-
 While you read the reports, think about these questions:
 
 - How would you check that the PET-to-MRI registration worked?
 - What do the motion estimates tell you?
 - Which outputs would you use for kinetic modelling?
 
-## Look at the outputs
+### The output files
 
 The outputs are in `~/pet_course/derivatives/petprep`. Open one participant's folder. For example, find the TAC file `sub-01_ses-baseline_desc-preproc_seg-gtm_tacs.tsv` and open it in JupyterLab. What do the rows and columns contain?
 
-## Try to run PETPrep
+## 2.2 Explore the PETPrep options
 
-PETPrep is run through a small Python wrapper called `petprep-docker`. Install it and look at its options:
+You don't run PETPrep in this workshop. Instead, you install `petprep-docker`, a Python wrapper that builds the full command to run PETPrep in a container, and you explore its options.
 
 ```bash
 pip install --user petprep-docker
@@ -41,14 +37,4 @@ petprep-docker --help
 
 You can ignore the pip warning that `~/.local/bin` isn't on your PATH.
 
-Now try to run PETPrep on one participant:
-
-```bash
-petprep-docker /neurodesktop-storage/course-material/pet/data/ds004869 ~/pet_course/petprep_test participant --participant-label 01
-```
-
-It fails. Read the error message, and then use `petprep-docker --help` to work out:
-
-- What is missing, and what would you need to make this run?
-- PETPrep runs FreeSurfer, which needs a licence. Which option passes the licence file?
-- This dataset already contains FreeSurfer outputs in `derivatives/freesurfer`. Which option would let PETPrep reuse them, and why would that help?
+Read through the help text to get an overview of what you can change. In the slides, you then see examples of PETPrep runs that went wrong. For each example, look through the options and work out what you could do differently to make the run work.

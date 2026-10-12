@@ -3,7 +3,7 @@ title: "PET data analysis workshop"
 subtitle: "Human Functional Brain Imaging, PET day, 14 October 2026"
 ---
 
-In this workshop, you take PET data from raw files to a pharmacological result:
+In this workshop, you take PET data from the raw files to estimated outcomes:
 
 1. [Convert raw PET data to BIDS](01-ezbids.qmd) with ezBIDS.
 2. [Look at the outputs of PETPrep](02-petprep.qmd), the PET preprocessing pipeline.
@@ -17,7 +17,7 @@ Start with [Before you start](setup.qmd).
 
 ## The dataset
 
-Most of the workshop uses [11C]MC1, a radioligand for cyclooxygenase-2 (COX-2), from OpenNeuro dataset [ds004869](https://openneuro.org/datasets/ds004869). It has two groups of healthy participants:
+Most of the workshop uses \[^11^C\]MC1, a radioligand for cyclooxygenase-2 (COX-2), from OpenNeuro dataset [ds004869](https://openneuro.org/datasets/ds004869). It has two groups of healthy participants:
 
 | Group | Participants | Sessions | Scan length |
 | --- | --- | --- | --- |
@@ -28,7 +28,7 @@ Every scan has arterial blood data: plasma and whole-blood radioactivity, and th
 
 In the workshop, you analyse six participants: sub-02, sub-05, and sub-08 from the blocking group, and sub-11, sub-13, and sub-14 from the test-retest group.
 
-For the BIDS conversion in part 1, you use a separate set of raw DICOM files: [11C]PE2I, [18F]FE-PE2I, and [15O]water PET, and a T1-weighted MRI, from two participants.
+For the BIDS conversion in part 1, you use a separate set of raw DICOM files: \[^11^C\]PE2I, \[^18^F\]FE-PE2I, and \[^15^O\]water PET, and a T1-weighted MRI, from two participants.
 
 ## Further reading
 

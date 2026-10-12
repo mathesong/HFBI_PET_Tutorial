@@ -2,7 +2,7 @@
 title: "4. Kinetic modelling with PETFit"
 ---
 
-[PETFit](https://github.com/mathesong/petfit) fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models.
+[PETFit](https://github.com/mathesong/petfit) fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models. You do two analyses: a primary analysis, where you fit the two-tissue compartment model (2TCM) to a few regions, and a second analysis for the [Lassen plot](05-lassen.qmd), where you fit linear models to more regions.
 
 If this is a new terminal, set the two variables from [part 3](03-bloodstream.qmd#start-the-app) first:
 
@@ -13,7 +13,11 @@ SIF=/neurodesktop-storage/course-material/pet/containers
 
 ## Define your regions
 
-PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions.
+PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions. Define all the regions that you need for both analyses now:
+
+- The frontal, temporal, parietal, and occipital cortices. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the [FreeSurfer cortical parcellation page](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation).
+- The anterior cingulate cortex and the insula.
+- The hippocampus and the amygdala.
 
 1. Start the region definition app:
 
@@ -23,28 +27,62 @@ PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them 
    ```
 
 2. Open `http://130.238.147.132:YOUR_PORT/proxy/3838/` in a browser tab.
-3. Define several cortical regions, such as frontal, temporal, parietal, occipital, and cingulate, and several subcortical regions. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the [FreeSurfer cortical parcellation page](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation).
+3. Define your regions.
 4. Generate the combined TACs. This takes a couple of minutes, because it combines the TACs for every participant in the dataset.
-5. Stop the app with Ctrl+C.
 
 Your regions and the combined TACs are saved in `~/pet_course/derivatives/petfit`.
 
-## Fit models
+## Primary analysis: 2TCM
 
-1. Start the modelling app. It uses your bloodstream input functions:
+1. Start the modelling app. It uses the input functions from your own bloodstream models:
 
    ```bash
    cd ~/pet_course
-   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func modelling_plasma --bids_dir /data --derivatives_dir ~/pet_course/derivatives --blood_dir ~/pet_course/derivatives/bloodstream
+   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func modelling_plasma --bids_dir /data --derivatives_dir ~/pet_course/derivatives --blood_dir ~/pet_course/derivatives/bloodstream/Secondary_Analysis
    ```
 
 2. Open `http://130.238.147.132:YOUR_PORT/proxy/3838/` in a browser tab.
-3. Restrict the analysis to the six workshop participants: `02;05;08;11;13;14`.
-4. Work through the steps in the app, and read the report that each step produces.
-5. Fit the two-tissue compartment model (2TCM) and multilinear analysis 1 (MA1). Both estimate the total distribution volume, *V*~T~.
+3. On the **Data Definition** tab, restrict the analysis to the six workshop participants, `02;05;08;11;13;14`, and choose two or three of your regions. Create the analysis data.
+4. Read the data definition report. Is anything wrong with the data? If so, revise your data definition and create the analysis data again.
+5. On the **Weights Definition** and **Fit Delay** tabs, choose your settings, run each step, and read its report.
+6. On the **Model 1** tab, choose **2TCM**, fit the model, and read the report.
 
 The reports are in `~/pet_course/derivatives/petfit/Primary_Analysis/reports`. Open them in JupyterLab and click **Trust HTML**.
 
-- Do the models fit the data well?
-- How do the *V*~T~ values compare between the test and retest scans?
-- How do they compare between the baseline and blocked scans? In which regions?
+- Does the 2TCM fit the data well?
+- How do the *V*~T~ values compare between the baseline and blocked scans? In which regions?
+
+## Lassen analysis: MA1 and Logan
+
+For the Lassen plot, you need *V*~T~ in more regions. Linear models are faster than the 2TCM and more robust to noise, so you use multilinear analysis 1 (MA1) and the Logan plot. Both estimate *V*~T~, and both need a time point, *t*\*, after which the linear relationship holds.
+
+1. Start the modelling app again, with a new analysis folder:
+
+   ```bash
+   cd ~/pet_course
+   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func modelling_plasma --bids_dir /data --derivatives_dir ~/pet_course/derivatives --blood_dir ~/pet_course/derivatives/bloodstream/Secondary_Analysis --analysis_foldername Lassen_Analysis
+   ```
+
+2. Open the app as before.
+3. On the **Data Definition** tab, choose the same participants, and all the regions that you defined. Create the analysis data, and check the report.
+4. Choose your weights and delay settings, as in the primary analysis.
+5. On the **Find t\*** tab, generate the *t*\* plots, and choose a value of *t*\*.
+6. Fit MA1 as **Model 1** and Logan as **Model 2**, using your value of *t*\*.
+
+The reports are in `~/pet_course/derivatives/petfit/Lassen_Analysis/reports`.
+
+- How did you choose *t*\*?
+- How do the *V*~T~ values from MA1 and Logan compare with each other, and with the 2TCM values from your primary analysis?
+
+## Surface-based analysis with PETSurfer
+
+PETPrep can also run surface-based analyses with PETSurfer, which fits models at each point on the cortical surface instead of in regions. The PETSurfer outputs for this dataset have one report per session:
+
+```bash
+/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh sub-01_ses-baseline.html
+```
+
+The script prints a link. Open it in a new browser tab. To see a list of all reports, run the script without a filename.
+
+- What can a surface-based analysis show that a region-based analysis can't?
+- What are the costs of working at this level of detail?

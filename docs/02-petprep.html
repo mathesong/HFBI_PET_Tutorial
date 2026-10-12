@@ -381,9 +381,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#look-at-the-reports" id="toc-look-at-the-reports" class="nav-link active" data-scroll-target="#look-at-the-reports">Look at the reports</a></li>
-  <li><a href="#look-at-the-outputs" id="toc-look-at-the-outputs" class="nav-link" data-scroll-target="#look-at-the-outputs">Look at the outputs</a></li>
-  <li><a href="#try-to-run-petprep" id="toc-try-to-run-petprep" class="nav-link" data-scroll-target="#try-to-run-petprep">Try to run PETPrep</a></li>
+  <li><a href="#look-at-the-petprep-outputs" id="toc-look-at-the-petprep-outputs" class="nav-link active" data-scroll-target="#look-at-the-petprep-outputs">2.1 Look at the PETPrep outputs</a>
+  <ul class="collapse">
+  <li><a href="#the-reports" id="toc-the-reports" class="nav-link" data-scroll-target="#the-reports">The reports</a></li>
+  <li><a href="#the-output-files" id="toc-the-output-files" class="nav-link" data-scroll-target="#the-output-files">The output files</a></li>
+  </ul></li>
+  <li><a href="#explore-the-petprep-options" id="toc-explore-the-petprep-options" class="nav-link" data-scroll-target="#explore-the-petprep-options">2.2 Explore the PETPrep options</a></li>
   </ul>
 </nav>
     </div>
@@ -411,13 +414,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="https://github.com/nipreps/petprep">PETPrep</a> preprocesses PET data. It corrects for head motion, registers the PET images to the participant’s MRI, and extracts time-activity curves (TACs) from FreeSurfer regions. A full run takes hours per participant, so you look at outputs that have already been computed for this dataset.</p>
-<section id="look-at-the-reports" class="level2">
-<h2 class="anchored" data-anchor-id="look-at-the-reports">Look at the reports</h2>
+<section id="look-at-the-petprep-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="look-at-the-petprep-outputs">2.1 Look at the PETPrep outputs</h2>
+<section id="the-reports" class="level3">
+<h3 class="anchored" data-anchor-id="the-reports">The reports</h3>
 <p>PETPrep writes one HTML report per participant. To open a report, run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/view_petprep.sh</span> sub-01.html</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The script prints a link. Open it in a new browser tab. When you are done, press Ctrl+C in the terminal. To see a list of all reports, run the script without a filename.</p>
-<p>The surface-based analyses (petsurfer) have one report per session:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh</span> sub-01_ses-baseline.html</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>While you read the reports, think about these questions:</p>
 <ul>
 <li>How would you check that the PET-to-MRI registration worked?</li>
@@ -425,24 +428,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Which outputs would you use for kinetic modelling?</li>
 </ul>
 </section>
-<section id="look-at-the-outputs" class="level2">
-<h2 class="anchored" data-anchor-id="look-at-the-outputs">Look at the outputs</h2>
+<section id="the-output-files" class="level3">
+<h3 class="anchored" data-anchor-id="the-output-files">The output files</h3>
 <p>The outputs are in <code>~/pet_course/derivatives/petprep</code>. Open one participant’s folder. For example, find the TAC file <code>sub-01_ses-baseline_desc-preproc_seg-gtm_tacs.tsv</code> and open it in JupyterLab. What do the rows and columns contain?</p>
 </section>
-<section id="try-to-run-petprep" class="level2">
-<h2 class="anchored" data-anchor-id="try-to-run-petprep">Try to run PETPrep</h2>
-<p>PETPrep is run through a small Python wrapper called <code>petprep-docker</code>. Install it and look at its options:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--user</span> petprep-docker</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">petprep-docker</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="explore-the-petprep-options" class="level2">
+<h2 class="anchored" data-anchor-id="explore-the-petprep-options">2.2 Explore the PETPrep options</h2>
+<p>You don’t run PETPrep in this workshop. Instead, you install <code>petprep-docker</code>, a Python wrapper that builds the full command to run PETPrep in a container, and you explore its options.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--user</span> petprep-docker</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">petprep-docker</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can ignore the pip warning that <code>~/.local/bin</code> isn’t on your PATH.</p>
-<p>Now try to run PETPrep on one participant:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">petprep-docker</span> /neurodesktop-storage/course-material/pet/data/ds004869 ~/pet_course/petprep_test participant <span class="at">--participant-label</span> 01</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>It fails. Read the error message, and then use <code>petprep-docker --help</code> to work out:</p>
-<ul>
-<li>What is missing, and what would you need to make this run?</li>
-<li>PETPrep runs FreeSurfer, which needs a licence. Which option passes the licence file?</li>
-<li>This dataset already contains FreeSurfer outputs in <code>derivatives/freesurfer</code>. Which option would let PETPrep reuse them, and why would that help?</li>
-</ul>
+<p>Read through the help text to get an overview of what you can change. In the slides, you then see examples of PETPrep runs that went wrong. For each example, look through the options and work out what you could do differently to make the run work.</p>
 
 
 </section>

@@ -383,8 +383,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#start-the-app" id="toc-start-the-app" class="nav-link active" data-scroll-target="#start-the-app">Start the app</a></li>
   <li><a href="#open-the-app" id="toc-open-the-app" class="nav-link" data-scroll-target="#open-the-app">Open the app</a></li>
-  <li><a href="#build-your-configuration" id="toc-build-your-configuration" class="nav-link" data-scroll-target="#build-your-configuration">Build your configuration</a></li>
-  <li><a href="#read-the-report" id="toc-read-the-report" class="nav-link" data-scroll-target="#read-the-report">Read the report</a></li>
+  <li><a href="#run-a-default-analysis" id="toc-run-a-default-analysis" class="nav-link" data-scroll-target="#run-a-default-analysis">Run a default analysis</a></li>
+  <li><a href="#fit-models-to-the-data" id="toc-fit-models-to-the-data" class="nav-link" data-scroll-target="#fit-models-to-the-data">Fit models to the data</a></li>
   </ul>
 </nav>
     </div>
@@ -412,6 +412,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="https://github.com/mathesong/bloodstream">bloodstream</a> models arterial blood data and produces an arterial input function for each PET scan. You choose a model for each blood component in an app, and bloodstream fits the models and writes a report.</p>
+<p>You run bloodstream twice. First you run it with the default settings, and then you fit models that you choose yourself.</p>
 <section id="start-the-app" class="level2">
 <h2 class="anchored" data-anchor-id="start-the-app">Start the app</h2>
 <p>To keep the commands short, first save two paths in variables. If you open a new terminal, run these two lines again:</p>
@@ -439,21 +440,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>http://130.238.147.132:YOUR_PORT/proxy/3838/</code></pre>
 <p>The final <code>/</code> is needed. If the terminal says a different port, such as 3839, use that number instead.</p>
 </section>
-<section id="build-your-configuration" class="level2">
-<h2 class="anchored" data-anchor-id="build-your-configuration">Build your configuration</h2>
+<section id="run-a-default-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="run-a-default-analysis">Run a default analysis</h2>
 <ol type="1">
 <li>Restrict the analysis to the six workshop participants: <code>02;05;08;11;13;14</code>.</li>
-<li>Choose a model for each blood component: the parent fraction, the blood-to-plasma ratio, the arterial input function, and whole blood. What do the options mean, and which would you choose for each?</li>
-<li>Run the pipeline from the app.</li>
+<li>Leave all the other settings as they are, and run the pipeline from the app. Keep the app’s tab open until the app closes itself.</li>
 </ol>
-<p>The run takes several minutes. Its progress appears in the terminal. When it finishes, stop the app with Ctrl+C in the terminal.</p>
+<p>The run takes several minutes, and its progress appears in the terminal.</p>
+<p>The results are in <code>~/pet_course/derivatives/bloodstream/Primary_Analysis</code>. Open the report, <code>bloodstream_report.html</code>, in JupyterLab, and click <strong>Trust HTML</strong> at the top, which turns on the interactive plots.</p>
+<ul>
+<li>What did the default settings do with each blood component?</li>
+<li>Do the curves look reasonable for every participant?</li>
+</ul>
 </section>
-<section id="read-the-report" class="level2">
-<h2 class="anchored" data-anchor-id="read-the-report">Read the report</h2>
-<p>The report is <code>~/pet_course/derivatives/bloodstream/Primary_Analysis/bloodstream_report.html</code>. Open it in JupyterLab and click <strong>Trust HTML</strong> at the top, which turns on the interactive plots.</p>
+<section id="fit-models-to-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="fit-models-to-the-data">Fit models to the data</h2>
+<p>Start the app again, with one extra option, <code>--analysis_foldername</code>, so that the new results go to a separate folder and don’t replace the default analysis:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/pet_course</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/bloodstream.sif <span class="at">--mode</span> interactive <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives <span class="at">--analysis_foldername</span> Secondary_Analysis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li>Open the app as before.</li>
+<li>Restrict the analysis to the six workshop participants: <code>02;05;08;11;13;14</code>.</li>
+<li>Choose a model for the parent fraction, the blood-to-plasma ratio, and the arterial input function. What do the options mean, and which would you choose for each?</li>
+<li>Run the pipeline, and keep the tab open until the app closes itself.</li>
+</ol>
+<p>The results are in <code>~/pet_course/derivatives/bloodstream/Secondary_Analysis</code>. Open the report and click <strong>Trust HTML</strong>.</p>
 <ul>
 <li>Do the model fits look reasonable for every participant?</li>
-<li>Look closely at sub-13 <code>ses-test</code>. What is different about its blood data, and how might that affect the results?</li>
+<li>How do the results differ from the default analysis?</li>
 </ul>
 
 

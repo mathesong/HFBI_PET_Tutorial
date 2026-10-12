@@ -414,12 +414,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://github.com/openneuropet/ezbids_docker">ezBIDS</a> is a web app that converts raw scanner data, such as DICOM files, to BIDS. It guesses what each scan is and proposes BIDS names, and you check and correct its guesses before it converts the data. For PET, it uses the same converter as <a href="https://github.com/openneuropet/PET2BIDS">PET2BIDS</a>.</p>
 <section id="the-raw-data" class="level2">
 <h2 class="anchored" data-anchor-id="the-raw-data">The raw data</h2>
-<p>You convert DICOM files from two participants, <code>ASPC0230_06</code> and <code>ASPC0230_07</code>, scanned on a GE Discovery MI PET/CT and a GE SIGNA PET/MR. Each participant has four scans:</p>
+<p>You convert DICOM files from two participants, <code>ASPC0230_06</code> and <code>ASPC0230_07</code>. Each participant has four scans:</p>
 <ul>
 <li>a T1-weighted MRI</li>
-<li>[11C]PE2I, a dopamine transporter radioligand</li>
-<li>[18F]FE-PE2I, a fluorine-18 version of the same radioligand</li>
-<li>[15O]water, for blood flow</li>
+<li>[<sup>11</sup>C]PE2I, a dopamine transporter radioligand</li>
+<li>[<sup>18</sup>F]FE-PE2I, a fluorine-18 version of the same radioligand</li>
+<li>[<sup>15</sup>O]water, for blood flow</li>
 </ul>
 <p>The data are in <code>/neurodesktop-storage/course-material/pet/data/sourcedata</code>. They stay on the server: you don’t download them.</p>
 </section>
@@ -466,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="backup-bids-manager" class="level2">
 <h2 class="anchored" data-anchor-id="backup-bids-manager">Backup: BIDS-Manager</h2>
-<p>If ezBIDS doesn’t work, use BIDS-Manager instead. It also runs on the Neurodesk <strong>Desktop</strong>. Its first launch is slow, because it prepares the BIDS schema.</p>
+<p>If ezBIDS doesn’t work, use BIDS-Manager instead. It also runs on the Neurodesk <strong>Desktop</strong>.</p>
 <ol type="1">
 <li><p>On the Desktop, open a terminal and run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/bids-manager/run_bidsmgr.sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>

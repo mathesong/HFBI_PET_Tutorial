@@ -382,7 +382,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#define-your-regions" id="toc-define-your-regions" class="nav-link active" data-scroll-target="#define-your-regions">Define your regions</a></li>
-  <li><a href="#fit-models" id="toc-fit-models" class="nav-link" data-scroll-target="#fit-models">Fit models</a></li>
+  <li><a href="#primary-analysis-2tcm" id="toc-primary-analysis-2tcm" class="nav-link" data-scroll-target="#primary-analysis-2tcm">Primary analysis: 2TCM</a></li>
+  <li><a href="#lassen-analysis-ma1-and-logan" id="toc-lassen-analysis-ma1-and-logan" class="nav-link" data-scroll-target="#lassen-analysis-ma1-and-logan">Lassen analysis: MA1 and Logan</a></li>
+  <li><a href="#surface-based-analysis-with-petsurfer" id="toc-surface-based-analysis-with-petsurfer" class="nav-link" data-scroll-target="#surface-based-analysis-with-petsurfer">Surface-based analysis with PETSurfer</a></li>
   </ul>
 </nav>
     </div>
@@ -409,40 +411,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><a href="https://github.com/mathesong/petfit">PETFit</a> fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models.</p>
+<p><a href="https://github.com/mathesong/petfit">PETFit</a> fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models. You do two analyses: a primary analysis, where you fit the two-tissue compartment model (2TCM) to a few regions, and a second analysis for the <a href="./05-lassen.html">Lassen plot</a>, where you fit linear models to more regions.</p>
 <p>If this is a new terminal, set the two variables from <a href="./03-bloodstream.html#start-the-app">part 3</a> first:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">DATA</span><span class="op">=</span>/neurodesktop-storage/course-material/pet/data/ds004869</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">SIF</span><span class="op">=</span>/neurodesktop-storage/course-material/pet/containers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="define-your-regions" class="level2">
 <h2 class="anchored" data-anchor-id="define-your-regions">Define your regions</h2>
-<p>PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions.</p>
+<p>PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions. Define all the regions that you need for both analyses now:</p>
+<ul>
+<li>The frontal, temporal, parietal, and occipital cortices. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the <a href="https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation">FreeSurfer cortical parcellation page</a>.</li>
+<li>The anterior cingulate cortex and the insula.</li>
+<li>The hippocampus and the amygdala.</li>
+</ul>
 <ol type="1">
 <li><p>Start the region definition app:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/pet_course</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/petfit.sif <span class="at">--func</span> regiondef <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Open <code>http://130.238.147.132:YOUR_PORT/proxy/3838/</code> in a browser tab.</p></li>
-<li><p>Define several cortical regions, such as frontal, temporal, parietal, occipital, and cingulate, and several subcortical regions. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the <a href="https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation">FreeSurfer cortical parcellation page</a>.</p></li>
+<li><p>Define your regions.</p></li>
 <li><p>Generate the combined TACs. This takes a couple of minutes, because it combines the TACs for every participant in the dataset.</p></li>
-<li><p>Stop the app with Ctrl+C.</p></li>
 </ol>
 <p>Your regions and the combined TACs are saved in <code>~/pet_course/derivatives/petfit</code>.</p>
 </section>
-<section id="fit-models" class="level2">
-<h2 class="anchored" data-anchor-id="fit-models">Fit models</h2>
+<section id="primary-analysis-2tcm" class="level2">
+<h2 class="anchored" data-anchor-id="primary-analysis-2tcm">Primary analysis: 2TCM</h2>
 <ol type="1">
-<li><p>Start the modelling app. It uses your bloodstream input functions:</p>
+<li><p>Start the modelling app. It uses the input functions from your own bloodstream models:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/pet_course</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/petfit.sif <span class="at">--func</span> modelling_plasma <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives <span class="at">--blood_dir</span> ~/pet_course/derivatives/bloodstream</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/petfit.sif <span class="at">--func</span> modelling_plasma <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives <span class="at">--blood_dir</span> ~/pet_course/derivatives/bloodstream/Secondary_Analysis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Open <code>http://130.238.147.132:YOUR_PORT/proxy/3838/</code> in a browser tab.</p></li>
-<li><p>Restrict the analysis to the six workshop participants: <code>02;05;08;11;13;14</code>.</p></li>
-<li><p>Work through the steps in the app, and read the report that each step produces.</p></li>
-<li><p>Fit the two-tissue compartment model (2TCM) and multilinear analysis 1 (MA1). Both estimate the total distribution volume, <em>V</em><sub>T</sub>.</p></li>
+<li><p>On the <strong>Data Definition</strong> tab, restrict the analysis to the six workshop participants, <code>02;05;08;11;13;14</code>, and choose two or three of your regions. Create the analysis data.</p></li>
+<li><p>Read the data definition report. Is anything wrong with the data? If so, revise your data definition and create the analysis data again.</p></li>
+<li><p>On the <strong>Weights Definition</strong> and <strong>Fit Delay</strong> tabs, choose your settings, run each step, and read its report.</p></li>
+<li><p>On the <strong>Model 1</strong> tab, choose <strong>2TCM</strong>, fit the model, and read the report.</p></li>
 </ol>
 <p>The reports are in <code>~/pet_course/derivatives/petfit/Primary_Analysis/reports</code>. Open them in JupyterLab and click <strong>Trust HTML</strong>.</p>
 <ul>
-<li>Do the models fit the data well?</li>
-<li>How do the <em>V</em><sub>T</sub> values compare between the test and retest scans?</li>
-<li>How do they compare between the baseline and blocked scans? In which regions?</li>
+<li>Does the 2TCM fit the data well?</li>
+<li>How do the <em>V</em><sub>T</sub> values compare between the baseline and blocked scans? In which regions?</li>
+</ul>
+</section>
+<section id="lassen-analysis-ma1-and-logan" class="level2">
+<h2 class="anchored" data-anchor-id="lassen-analysis-ma1-and-logan">Lassen analysis: MA1 and Logan</h2>
+<p>For the Lassen plot, you need <em>V</em><sub>T</sub> in more regions. Linear models are faster than the 2TCM and more robust to noise, so you use multilinear analysis 1 (MA1) and the Logan plot. Both estimate <em>V</em><sub>T</sub>, and both need a time point, <em>t</em>*, after which the linear relationship holds.</p>
+<ol type="1">
+<li><p>Start the modelling app again, with a new analysis folder:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/pet_course</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/petfit.sif <span class="at">--func</span> modelling_plasma <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives <span class="at">--blood_dir</span> ~/pet_course/derivatives/bloodstream/Secondary_Analysis <span class="at">--analysis_foldername</span> Lassen_Analysis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Open the app as before.</p></li>
+<li><p>On the <strong>Data Definition</strong> tab, choose the same participants, and all the regions that you defined. Create the analysis data, and check the report.</p></li>
+<li><p>Choose your weights and delay settings, as in the primary analysis.</p></li>
+<li><p>On the <strong>Find t*</strong> tab, generate the <em>t</em>* plots, and choose a value of <em>t</em>*.</p></li>
+<li><p>Fit MA1 as <strong>Model 1</strong> and Logan as <strong>Model 2</strong>, using your value of <em>t</em>*.</p></li>
+</ol>
+<p>The reports are in <code>~/pet_course/derivatives/petfit/Lassen_Analysis/reports</code>.</p>
+<ul>
+<li>How did you choose <em>t</em>*?</li>
+<li>How do the <em>V</em><sub>T</sub> values from MA1 and Logan compare with each other, and with the 2TCM values from your primary analysis?</li>
+</ul>
+</section>
+<section id="surface-based-analysis-with-petsurfer" class="level2">
+<h2 class="anchored" data-anchor-id="surface-based-analysis-with-petsurfer">Surface-based analysis with PETSurfer</h2>
+<p>PETPrep can also run surface-based analyses with PETSurfer, which fits models at each point on the cortical surface instead of in regions. The PETSurfer outputs for this dataset have one report per session:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh</span> sub-01_ses-baseline.html</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The script prints a link. Open it in a new browser tab. To see a list of all reports, run the script without a filename.</p>
+<ul>
+<li>What can a surface-based analysis show that a region-based analysis can’t?</li>
+<li>What are the costs of working at this level of detail?</li>
 </ul>
 
 

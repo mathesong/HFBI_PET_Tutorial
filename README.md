@@ -1,8 +1,8 @@
 # PET data analysis workshop
 
-Materials for the PET day of the Human Functional Brain Imaging course at Uppsala University (14 October 2026). In the workshop, participants take PET data from raw DICOM files to a pharmacological result: BIDS conversion with ezBIDS, PETPrep outputs, blood processing with bloodstream, kinetic modelling with PETFit, and a Lassen plot.
+Materials for the PET day of the Human Functional Brain Imaging course at Uppsala University (14 October 2026). In the workshop, participants take PET data from raw DICOM files to estimated outcomes: BIDS conversion with ezBIDS, PETPrep outputs, blood processing with bloodstream, kinetic modelling with PETFit, and a Lassen plot.
 
-**Workshop instructions:** WEBSITE_URL
+**Workshop instructions:** <https://mathesong.github.io/HFBI_PET_Tutorial/>
 
 The workshop runs on the course server in Neurodesk, so the commands and paths assume that environment.
 

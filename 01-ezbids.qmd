@@ -6,12 +6,12 @@ title: "1. Convert data to BIDS with ezBIDS"
 
 ## The raw data
 
-You convert DICOM files from two participants, `ASPC0230_06` and `ASPC0230_07`, scanned on a GE Discovery MI PET/CT and a GE SIGNA PET/MR. Each participant has four scans:
+You convert DICOM files from two participants, `ASPC0230_06` and `ASPC0230_07`. Each participant has four scans:
 
 - a T1-weighted MRI
-- [11C]PE2I, a dopamine transporter radioligand
-- [18F]FE-PE2I, a fluorine-18 version of the same radioligand
-- [15O]water, for blood flow
+- \[^11^C\]PE2I, a dopamine transporter radioligand
+- \[^18^F\]FE-PE2I, a fluorine-18 version of the same radioligand
+- \[^15^O\]water, for blood flow
 
 The data are in `/neurodesktop-storage/course-material/pet/data/sourcedata`. They stay on the server: you don't download them.
 
@@ -53,7 +53,7 @@ While you work, think about these questions:
 
 ## Backup: BIDS-Manager
 
-If ezBIDS doesn't work, use BIDS-Manager instead. It also runs on the Neurodesk **Desktop**. Its first launch is slow, because it prepares the BIDS schema.
+If ezBIDS doesn't work, use BIDS-Manager instead. It also runs on the Neurodesk **Desktop**.
 
 1. On the Desktop, open a terminal and run:
 

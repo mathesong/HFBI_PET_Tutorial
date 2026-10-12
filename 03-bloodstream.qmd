@@ -4,6 +4,8 @@ title: "3. Blood data with bloodstream"
 
 [bloodstream](https://github.com/mathesong/bloodstream) models arterial blood data and produces an arterial input function for each PET scan. You choose a model for each blood component in an app, and bloodstream fits the models and writes a report.
 
+You run bloodstream twice. First you run it with the default settings, and then you fit models that you choose yourself.
+
 ## Start the app
 
 To keep the commands short, first save two paths in variables. If you open a new terminal, run these two lines again:
@@ -42,17 +44,33 @@ http://130.238.147.132:YOUR_PORT/proxy/3838/
 
 The final `/` is needed. If the terminal says a different port, such as 3839, use that number instead.
 
-## Build your configuration
+## Run a default analysis
 
 1. Restrict the analysis to the six workshop participants: `02;05;08;11;13;14`.
-2. Choose a model for each blood component: the parent fraction, the blood-to-plasma ratio, the arterial input function, and whole blood. What do the options mean, and which would you choose for each?
-3. Run the pipeline from the app.
+2. Leave all the other settings as they are, and run the pipeline from the app. Keep the app's tab open until the app closes itself.
 
-The run takes several minutes. Its progress appears in the terminal. When it finishes, stop the app with Ctrl+C in the terminal.
+The run takes several minutes, and its progress appears in the terminal.
 
-## Read the report
+The results are in `~/pet_course/derivatives/bloodstream/Primary_Analysis`. Open the report, `bloodstream_report.html`, in JupyterLab, and click **Trust HTML** at the top, which turns on the interactive plots.
 
-The report is `~/pet_course/derivatives/bloodstream/Primary_Analysis/bloodstream_report.html`. Open it in JupyterLab and click **Trust HTML** at the top, which turns on the interactive plots.
+- What did the default settings do with each blood component?
+- Do the curves look reasonable for every participant?
+
+## Fit models to the data
+
+Start the app again, with one extra option, `--analysis_foldername`, so that the new results go to a separate folder and don't replace the default analysis:
+
+```bash
+cd ~/pet_course
+apptainer run -B $DATA:/data:ro $SIF/bloodstream.sif --mode interactive --bids_dir /data --derivatives_dir ~/pet_course/derivatives --analysis_foldername Secondary_Analysis
+```
+
+1. Open the app as before.
+2. Restrict the analysis to the six workshop participants: `02;05;08;11;13;14`.
+3. Choose a model for the parent fraction, the blood-to-plasma ratio, and the arterial input function. What do the options mean, and which would you choose for each?
+4. Run the pipeline, and keep the tab open until the app closes itself.
+
+The results are in `~/pet_course/derivatives/bloodstream/Secondary_Analysis`. Open the report and click **Trust HTML**.
 
 - Do the model fits look reasonable for every participant?
-- Look closely at sub-13 `ses-test`. What is different about its blood data, and how might that affect the results?
+- How do the results differ from the default analysis?
