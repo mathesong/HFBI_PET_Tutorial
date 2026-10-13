@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./05-lassen.html" rel="next">
+<link href="./05-petsurfer.html" rel="next">
 <link href="./03-bloodstream.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -359,8 +359,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-lassen.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5. Lassen plot</span></a>
+  <a href="./05-petsurfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. PETSurfer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-lassen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Lassen plot</span></a>
   </div>
 </li>
       </ul>
@@ -382,9 +388,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#define-your-regions" id="toc-define-your-regions" class="nav-link active" data-scroll-target="#define-your-regions">Define your regions</a></li>
-  <li><a href="#primary-analysis-2tcm" id="toc-primary-analysis-2tcm" class="nav-link" data-scroll-target="#primary-analysis-2tcm">Primary analysis: 2TCM</a></li>
-  <li><a href="#lassen-analysis-ma1-and-logan" id="toc-lassen-analysis-ma1-and-logan" class="nav-link" data-scroll-target="#lassen-analysis-ma1-and-logan">Lassen analysis: MA1 and Logan</a></li>
-  <li><a href="#surface-based-analysis-with-petsurfer" id="toc-surface-based-analysis-with-petsurfer" class="nav-link" data-scroll-target="#surface-based-analysis-with-petsurfer">Surface-based analysis with PETSurfer</a></li>
+  <li><a href="#fit-models" id="toc-fit-models" class="nav-link" data-scroll-target="#fit-models">Fit models</a>
+  <ul class="collapse">
+  <li><a href="#prepare-the-data" id="toc-prepare-the-data" class="nav-link" data-scroll-target="#prepare-the-data">Prepare the data</a></li>
+  <li><a href="#compartment-models" id="toc-compartment-models" class="nav-link" data-scroll-target="#compartment-models">Compartment models</a></li>
+  <li><a href="#linear-models" id="toc-linear-models" class="nav-link" data-scroll-target="#linear-models">Linear models</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -411,76 +420,76 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><a href="https://github.com/mathesong/petfit">PETFit</a> fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models. You do two analyses: a primary analysis, where you fit the two-tissue compartment model (2TCM) to a few regions, and a second analysis for the <a href="./05-lassen.html">Lassen plot</a>, where you fit linear models to more regions.</p>
-<p>If this is a new terminal, set the two variables from <a href="./03-bloodstream.html#start-the-app">part 3</a> first:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">DATA</span><span class="op">=</span>/neurodesktop-storage/course-material/pet/data/ds004869</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">SIF</span><span class="op">=</span>/neurodesktop-storage/course-material/pet/containers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><a href="https://github.com/mathesong/petfit">PETFit</a> fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models. You fit several models, both nonlinear and linear, in one analysis.</p>
+<p>As in <a href="./03-bloodstream.html#start-the-app">part 3</a>, you start the apps with a course script, which prints the command that it runs and the link to the app.</p>
 <section id="define-your-regions" class="level2">
 <h2 class="anchored" data-anchor-id="define-your-regions">Define your regions</h2>
-<p>PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions. Define all the regions that you need for both analyses now:</p>
+<p>PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions. Define these regions:</p>
 <ul>
 <li>The frontal, temporal, parietal, and occipital cortices. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the <a href="https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation">FreeSurfer cortical parcellation page</a>.</li>
 <li>The anterior cingulate cortex and the insula.</li>
 <li>The hippocampus and the amygdala.</li>
+<li>(Please note that these region definition files are re-usable between studies!!)</li>
 </ul>
 <ol type="1">
 <li><p>Start the region definition app:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/pet_course</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/petfit.sif <span class="at">--func</span> regiondef <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Open <code>http://130.238.147.132:YOUR_PORT/proxy/3838/</code> in a browser tab.</p></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/run_petfit.sh</span> regiondef</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It runs the PETFit container with <code>--func regiondef</code>.</p></li>
+<li><p>When the terminal shows <code>Listening on</code>, open the link that the script printed in a new browser tab.</p></li>
 <li><p>Define your regions.</p></li>
 <li><p>Generate the combined TACs. This takes a couple of minutes, because it combines the TACs for every participant in the dataset.</p></li>
 </ol>
 <p>Your regions and the combined TACs are saved in <code>~/pet_course/derivatives/petfit</code>.</p>
 </section>
-<section id="primary-analysis-2tcm" class="level2">
-<h2 class="anchored" data-anchor-id="primary-analysis-2tcm">Primary analysis: 2TCM</h2>
+<section id="fit-models" class="level2">
+<h2 class="anchored" data-anchor-id="fit-models">Fit models</h2>
 <ol type="1">
-<li><p>Start the modelling app. It uses the input functions from your own bloodstream models:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/pet_course</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/petfit.sif <span class="at">--func</span> modelling_plasma <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives <span class="at">--blood_dir</span> ~/pet_course/derivatives/bloodstream/Secondary_Analysis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Open <code>http://130.238.147.132:YOUR_PORT/proxy/3838/</code> in a browser tab.</p></li>
-<li><p>On the <strong>Data Definition</strong> tab, restrict the analysis to the six workshop participants, <code>02;05;08;11;13;14</code>, and choose two or three of your regions. Create the analysis data.</p></li>
-<li><p>Read the data definition report. Is anything wrong with the data? If so, revise your data definition and create the analysis data again.</p></li>
-<li><p>On the <strong>Weights Definition</strong> and <strong>Fit Delay</strong> tabs, choose your settings, run each step, and read its report.</p></li>
-<li><p>On the <strong>Model 1</strong> tab, choose <strong>2TCM</strong>, fit the model, and read the report.</p></li>
+<li><p>Start the modelling app, with <code>Plasma_Models</code> as the analysis folder:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/run_petfit.sh</span> modelling_plasma <span class="at">--analysis_foldername</span> Plasma_Models</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It runs the PETFit container with <code>--func modelling_plasma</code>, with <code>--analysis_foldername Plasma_Models</code>, which saves the results in their own folder, and with <code>--blood_dir /data/derivatives/bloodstream/Primary_Analysis</code>. This points PETFit to arterial input functions that were already modelled with bloodstream for the whole dataset, so that everyone works from the same input functions.</p></li>
+<li><p>Open the link that the script prints in a new browser tab.</p></li>
 </ol>
-<p>The reports are in <code>~/pet_course/derivatives/petfit/Primary_Analysis/reports</code>. Open them in JupyterLab and click <strong>Trust HTML</strong>.</p>
+<p>The reports are in <code>~/pet_course/derivatives/petfit/Plasma_Models/reports</code>. Open them in JupyterLab and click <strong>Trust HTML</strong>, or open them in the web browser on the Neurodesk <strong>Desktop</strong>. Also look through the other files that PETFit wrote, in <code>~/pet_course/derivatives/petfit</code>.</p>
+<section id="prepare-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-the-data">Prepare the data</h3>
+<ol type="1">
+<li>On the <strong>Data Definition</strong> tab, restrict the analysis to three participants, <code>02;10;15</code>, and choose all the regions that you defined. Create the analysis data.</li>
+<li>Read the data definition report. Is anything wrong with the data? If so, revise your data definition and create the analysis data again.</li>
+<li>On the <strong>Weights Definition</strong> and <strong>Fit Delay</strong> tabs, choose your settings, run each step, and read its report.</li>
+</ol>
+</section>
+<section id="compartment-models" class="level3">
+<h3 class="anchored" data-anchor-id="compartment-models">Compartment models</h3>
+<ol type="1">
+<li>On the <strong>Model 1</strong> tab, choose <strong>1TCM</strong>, fit the model, and read the report.</li>
+</ol>
+<p>Would you say that the model fit the data sufficiently well?</p>
+<ol start="2" type="1">
+<li>Change <strong>Model 1</strong> to <strong>2TCM</strong>, fit the model again, and read the report.</li>
+</ol>
 <ul>
-<li>Does the 2TCM fit the data well?</li>
-<li>How do the <em>V</em><sub>T</sub> values compare between the baseline and blocked scans? In which regions?</li>
+<li>Which model fits the data better?</li>
+<li>Are all parameters estimated well?</li>
+<li>How do the <em>V</em><sub>T</sub> values change between the two scans of each participant? Compare the participants from the blocking group with the participant from the test-retest group. And what does this tell us?</li>
 </ul>
 </section>
-<section id="lassen-analysis-ma1-and-logan" class="level2">
-<h2 class="anchored" data-anchor-id="lassen-analysis-ma1-and-logan">Lassen analysis: MA1 and Logan</h2>
-<p>For the Lassen plot, you need <em>V</em><sub>T</sub> in more regions. Linear models are faster than the 2TCM and more robust to noise, so you use multilinear analysis 1 (MA1) and the Logan plot. Both estimate <em>V</em><sub>T</sub>, and both need a time point, <em>t</em>*, after which the linear relationship holds.</p>
+<section id="linear-models" class="level3">
+<h3 class="anchored" data-anchor-id="linear-models">Linear models</h3>
+<p>Linear models are much faster to estimate than nonlinear models, and more robust to noise, though they tend to have some systematic biases. Many of them need a time point, <em>t</em>*, after which the linear relationship holds.</p>
 <ol type="1">
-<li><p>Start the modelling app again, with a new analysis folder:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/pet_course</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> run <span class="at">-B</span> <span class="va">$DATA</span>:/data:ro <span class="va">$SIF</span>/petfit.sif <span class="at">--func</span> modelling_plasma <span class="at">--bids_dir</span> /data <span class="at">--derivatives_dir</span> ~/pet_course/derivatives <span class="at">--blood_dir</span> ~/pet_course/derivatives/bloodstream/Secondary_Analysis <span class="at">--analysis_foldername</span> Lassen_Analysis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Open the app as before.</p></li>
-<li><p>On the <strong>Data Definition</strong> tab, choose the same participants, and all the regions that you defined. Create the analysis data, and check the report.</p></li>
-<li><p>Choose your weights and delay settings, as in the primary analysis.</p></li>
-<li><p>On the <strong>Find t*</strong> tab, generate the <em>t</em>* plots, and choose a value of <em>t</em>*.</p></li>
-<li><p>Fit MA1 as <strong>Model 1</strong> and Logan as <strong>Model 2</strong>, using your value of <em>t</em>*.</p></li>
+<li>On the <strong>Find t*</strong> tab, generate the <em>t</em>* plots for the Logan plot, and choose a value of <em>t</em>*.</li>
+<li>On the <strong>Model 2</strong> tab, choose <strong>Logan</strong>, fit it with your value of <em>t</em>*, and read the report.</li>
+<li>On the <strong>Model 3</strong> tab, choose <strong>Patlak</strong>, fit it with a <em>t</em>* of 40 min, and read the report. What do you conclude?</li>
+<li>Change <strong>Model 3</strong> to <strong>MA1</strong>. Check <em>t</em>* again for MA1 on the <strong>Find t*</strong> tab, then fit MA1 and read the report.</li>
 </ol>
-<p>The reports are in <code>~/pet_course/derivatives/petfit/Lassen_Analysis/reports</code>.</p>
 <ul>
-<li>How did you choose <em>t</em>*?</li>
-<li>How do the <em>V</em><sub>T</sub> values from MA1 and Logan compare with each other, and with the 2TCM values from your primary analysis?</li>
-</ul>
-</section>
-<section id="surface-based-analysis-with-petsurfer" class="level2">
-<h2 class="anchored" data-anchor-id="surface-based-analysis-with-petsurfer">Surface-based analysis with PETSurfer</h2>
-<p>PETPrep can also run surface-based analyses with PETSurfer, which fits models at each point on the cortical surface instead of in regions. The PETSurfer outputs for this dataset have one report per session:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh</span> sub-01_ses-baseline.html</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The script prints a link. Open it in a new browser tab. To see a list of all reports, run the script without a filename.</p>
-<ul>
-<li>What can a surface-based analysis show that a region-based analysis can’t?</li>
-<li>What are the costs of working at this level of detail?</li>
+<li>What happened with the Patlak plot? Why?</li>
+<li>How did you choose <em>t</em>* for Logan and for MA1?</li>
+<li>If you have time: how do the <em>V</em><sub>T</sub> values from Logan and MA1 compare with each other, and with the 2TCM values?</li>
 </ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -903,8 +912,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./05-lassen.html" class="pagination-link" aria-label="5. Lassen plot">
-        <span class="nav-page-text">5. Lassen plot</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./05-petsurfer.html" class="pagination-link" aria-label="5. PETSurfer">
+        <span class="nav-page-text">5. PETSurfer</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

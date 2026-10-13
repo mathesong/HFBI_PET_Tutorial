@@ -4,7 +4,6 @@ title: "Before you start"
 
 ## Start your Neurodesk
 
-If your Neurodesk from the fMRI workshop is still running, open its link and skip to [Open a terminal](#open-a-terminal).
 
 1. Connect to the Uppsala University VPN.
 2. In a terminal on your laptop, log in to the course server with your Akka ID:

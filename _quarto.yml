@@ -28,8 +28,10 @@ website:
             text: "3. bloodstream"
           - href: 04-petfit.qmd
             text: "4. PETFit"
-          - href: 05-lassen.qmd
-            text: "5. Lassen plot"
+          - href: 05-petsurfer.qmd
+            text: "5. PETSurfer"
+          - href: 06-lassen.qmd
+            text: "6. Lassen plot"
       - href: troubleshooting.qmd
         text: Troubleshooting
 

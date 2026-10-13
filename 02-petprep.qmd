@@ -4,29 +4,29 @@ title: "2. PETPrep"
 
 [PETPrep](https://github.com/nipreps/petprep) preprocesses PET data. It corrects for head motion, registers the PET images to the participant's MRI, and extracts time-activity curves (TACs) from FreeSurfer regions. A full run takes hours per participant, so you look at outputs that have already been computed for this dataset.
 
-## 2.1 Look at the PETPrep outputs
+## 2.1 Part 1: Look at the PETPrep outputs
 
 ### The reports
 
 PETPrep writes one HTML report per participant. To open a report, run:
 
 ```bash
-/neurodesktop-storage/course-material/pet/scripts/view_petprep.sh sub-01.html
+/neurodesktop-storage/course-material/pet/scripts/view_petprep.sh sub-XX.html # choose a subject
 ```
 
 The script prints a link. Open it in a new browser tab. When you are done, press Ctrl+C in the terminal. To see a list of all reports, run the script without a filename.
 
-While you read the reports, think about these questions:
-
-- How would you check that the PET-to-MRI registration worked?
-- What do the motion estimates tell you?
-- Which outputs would you use for kinetic modelling?
+While you look through the reports, think about whether you would accept each step of the pipeline.
 
 ### The output files
 
-The outputs are in `~/pet_course/derivatives/petprep`. Open one participant's folder. For example, find the TAC file `sub-01_ses-baseline_desc-preproc_seg-gtm_tacs.tsv` and open it in JupyterLab. What do the rows and columns contain?
+Explore the outputs in `~/pet_course/derivatives/petprep`. Open one participant's folder. For example, find the TAC file `sub-01_ses-baseline_desc-preproc_seg-gtm_tacs.tsv` and open it in JupyterLab.
 
-## 2.2 Explore the PETPrep options
+(the image files are unfortunately empty to save on disk space)
+
+## 2.2 Part 2: Explore the PETPrep options
+
+Stop when you get here. This exercise is performed with slides, where you will propose which option might resolve the issue.
 
 You don't run PETPrep in this workshop. Instead, you install `petprep-docker`, a Python wrapper that builds the full command to run PETPrep in a container, and you explore its options.
 

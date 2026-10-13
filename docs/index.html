@@ -323,8 +323,14 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-lassen.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5. Lassen plot</span></a>
+  <a href="./05-petsurfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. PETSurfer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-lassen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Lassen plot</span></a>
   </div>
 </li>
       </ul>
@@ -380,7 +386,8 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="./02-petprep.html">Look at the outputs of PETPrep</a>, the PET preprocessing pipeline.</li>
 <li><a href="./03-bloodstream.html">Model the arterial blood data</a> with bloodstream.</li>
 <li><a href="./04-petfit.html">Fit kinetic models</a> to regional time-activity curves with PETFit.</li>
-<li><a href="./05-lassen.html">Estimate drug occupancy</a> with a Lassen plot.</li>
+<li><a href="./05-petsurfer.html">Look at surface-based kinetic modelling</a> with PETSurfer.</li>
+<li><a href="./06-lassen.html">Estimate drug occupancy</a> with a Lassen plot.</li>
 </ol>
 <p>You work in your own Neurodesk session on the course server. Everything you create goes in your home folder. The course data are read-only, so you can’t break anything for anyone else.</p>
 <p>Start with <a href="./setup.html">Before you start</a>.</p>
@@ -399,7 +406,7 @@ ul.task-list li input[type="checkbox"] {
 <th>Group</th>
 <th>Participants</th>
 <th>Sessions</th>
-<th>Scan length</th>
+<th></th>
 </tr>
 </thead>
 <tbody>
@@ -407,18 +414,18 @@ ul.task-list li input[type="checkbox"] {
 <td>Blocking</td>
 <td>sub-01 to sub-10</td>
 <td><code>baseline</code>, and <code>blocked</code> after 600 mg celecoxib, a COX-2 inhibitor</td>
-<td>120 min</td>
+<td></td>
 </tr>
 <tr class="even">
 <td>Test-retest</td>
 <td>sub-11 to sub-27</td>
 <td><code>test</code> and <code>retest</code></td>
-<td>90 min</td>
+<td></td>
 </tr>
 </tbody>
 </table>
 <p>Every scan has arterial blood data: plasma and whole-blood radioactivity, and the parent fraction measured with HPLC.</p>
-<p>In the workshop, you analyse six participants: sub-02, sub-05, and sub-08 from the blocking group, and sub-11, sub-13, and sub-14 from the test-retest group.</p>
+<p>In bloodstream, you analyse six participants: sub-02, sub-05, and sub-08 from the blocking group, and sub-11, sub-13, and sub-14 from the test-retest group. In PETFit, you analyse three participants: sub-02 and sub-10 from the blocking group, and sub-15 from the test-retest group.</p>
 <p>For the BIDS conversion in part 1, you use a separate set of raw DICOM files: [<sup>11</sup>C]PE2I, [<sup>18</sup>F]FE-PE2I, and [<sup>15</sup>O]water PET, and a T1-weighted MRI, from two participants.</p>
 </section>
 <section id="further-reading" class="level2">
@@ -431,6 +438,7 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="https://github.com/nipreps/petprep">PETPrep</a></li>
 <li><a href="https://github.com/mathesong/bloodstream">bloodstream</a></li>
 <li><a href="https://github.com/mathesong/petfit">PETFit</a></li>
+<li><a href="https://github.com/freesurfer/petsurfer-bids">PETSurfer</a></li>
 <li><a href="https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation">FreeSurfer cortical parcellation and lobe mapping</a></li>
 </ul>
 

@@ -1,6 +1,6 @@
 # PET data analysis workshop
 
-Materials for the PET day of the Human Functional Brain Imaging course at Uppsala University (14 October 2026). In the workshop, participants take PET data from raw DICOM files to estimated outcomes: BIDS conversion with ezBIDS, PETPrep outputs, blood processing with bloodstream, kinetic modelling with PETFit, and a Lassen plot.
+Materials for the PET day of the Human Functional Brain Imaging course at Uppsala University (14 October 2026). In the workshop, participants take PET data from raw DICOM files to estimated outcomes: BIDS conversion with ezBIDS, PETPrep outputs, blood processing with bloodstream, kinetic modelling with PETFit, surface-based kinetic modelling with PETSurfer, and a Lassen plot.
 
 **Workshop instructions:** <https://mathesong.github.io/HFBI_PET_Tutorial/>
 
@@ -19,9 +19,9 @@ The workshop runs on the course server in Neurodesk, so the commands and paths a
 | Script | What it does |
 | --- | --- |
 | `setup_pet_course.sh` | Creates `~/pet_course/derivatives` and copies the PETPrep outputs (without report figures) into it |
-| `view_petprep.sh`, `view_petsurfer.sh` | Serve a PETPrep or petsurfer report through the Jupyter proxy and print the link |
+| `view_petprep.sh`, `view_petsurfer.sh`, `view_bloodstream.sh` | Serve a PETPrep, PETSurfer, or bloodstream report through the Jupyter proxy and print the link |
 | `open_ezbids.sh` | Opens ezBIDS in Chromium on the Neurodesk Desktop, logged in, so that ezBIDS can read data on the server |
-| `run_bloodstream.sh`, `run_petfit.sh` | Backup launchers for the bloodstream and PETFit apps: run the same commands as the instructions, choose a free port, and print the link |
+| `run_bloodstream.sh`, `run_petfit.sh` | Start the bloodstream and PETFit apps: choose a free port, print the command and the link, and run the app. Extra options, such as `--analysis_foldername`, are passed on to the app |
 
 On the server, the scripts are in `/storage/common/hfbi/pet/scripts` (in Neurodesk: `/neurodesktop-storage/course-material/pet/scripts`).
 
@@ -41,4 +41,5 @@ Commit and push both the `.qmd` files and `docs/`. To publish with GitHub Pages,
 - [PETPrep](https://github.com/nipreps/petprep)
 - [bloodstream](https://github.com/mathesong/bloodstream)
 - [PETFit](https://github.com/mathesong/petfit)
+- [PETSurfer](https://github.com/freesurfer/petsurfer-bids)
 - [Neurodesk](https://www.neurodesk.org)

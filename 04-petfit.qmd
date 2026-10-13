@@ -2,87 +2,75 @@
 title: "4. Kinetic modelling with PETFit"
 ---
 
-[PETFit](https://github.com/mathesong/petfit) fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models. You do two analyses: a primary analysis, where you fit the two-tissue compartment model (2TCM) to a few regions, and a second analysis for the [Lassen plot](05-lassen.qmd), where you fit linear models to more regions.
+[PETFit](https://github.com/mathesong/petfit) fits kinetic models to regional TACs. It works in two steps: first you define your regions, and then you fit models. You fit several models, both nonlinear and linear, in one analysis.
 
-If this is a new terminal, set the two variables from [part 3](03-bloodstream.qmd#start-the-app) first:
-
-```bash
-DATA=/neurodesktop-storage/course-material/pet/data/ds004869
-SIF=/neurodesktop-storage/course-material/pet/containers
-```
+As in [part 3](03-bloodstream.qmd#start-the-app), you start the apps with a course script, which prints the command that it runs and the link to the app.
 
 ## Define your regions
 
-PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions. Define all the regions that you need for both analyses now:
+PETPrep extracts TACs from about 100 small FreeSurfer regions. You combine them into larger regions. Define these regions:
 
-- The frontal, temporal, parietal, and occipital cortices. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the [FreeSurfer cortical parcellation page](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation).
+- The frontal  temporal cortices. To find which FreeSurfer labels belong to each lobe, see the lobe mapping on the [FreeSurfer cortical parcellation page](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation).
 - The anterior cingulate cortex and the insula.
 - The hippocampus and the amygdala.
+- (Please note that these region definition files are re-usable between studies!!)
 
 1. Start the region definition app:
 
    ```bash
-   cd ~/pet_course
-   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func regiondef --bids_dir /data --derivatives_dir ~/pet_course/derivatives
+   /neurodesktop-storage/course-material/pet/scripts/run_petfit.sh regiondef
    ```
 
-2. Open `http://130.238.147.132:YOUR_PORT/proxy/3838/` in a browser tab.
+   It runs the PETFit container with `--func regiondef`.
+
+2. When the terminal shows `Listening on`, open the link that the script printed in a new browser tab.
 3. Define your regions.
 4. Generate the combined TACs. This takes a couple of minutes, because it combines the TACs for every participant in the dataset.
 
 Your regions and the combined TACs are saved in `~/pet_course/derivatives/petfit`.
 
-## Primary analysis: 2TCM
+## Fit models
 
-1. Start the modelling app. It uses the input functions from your own bloodstream models:
-
-   ```bash
-   cd ~/pet_course
-   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func modelling_plasma --bids_dir /data --derivatives_dir ~/pet_course/derivatives --blood_dir ~/pet_course/derivatives/bloodstream/Secondary_Analysis
-   ```
-
-2. Open `http://130.238.147.132:YOUR_PORT/proxy/3838/` in a browser tab.
-3. On the **Data Definition** tab, restrict the analysis to the six workshop participants, `02;05;08;11;13;14`, and choose two or three of your regions. Create the analysis data.
-4. Read the data definition report. Is anything wrong with the data? If so, revise your data definition and create the analysis data again.
-5. On the **Weights Definition** and **Fit Delay** tabs, choose your settings, run each step, and read its report.
-6. On the **Model 1** tab, choose **2TCM**, fit the model, and read the report.
-
-The reports are in `~/pet_course/derivatives/petfit/Primary_Analysis/reports`. Open them in JupyterLab and click **Trust HTML**.
-
-- Does the 2TCM fit the data well?
-- How do the *V*~T~ values compare between the baseline and blocked scans? In which regions?
-
-## Lassen analysis: MA1 and Logan
-
-For the Lassen plot, you need *V*~T~ in more regions. Linear models are faster than the 2TCM and more robust to noise, so you use multilinear analysis 1 (MA1) and the Logan plot. Both estimate *V*~T~, and both need a time point, *t*\*, after which the linear relationship holds.
-
-1. Start the modelling app again, with a new analysis folder:
+1. Start the modelling app, with `Plasma_Models` as the analysis folder:
 
    ```bash
-   cd ~/pet_course
-   apptainer run -B $DATA:/data:ro $SIF/petfit.sif --func modelling_plasma --bids_dir /data --derivatives_dir ~/pet_course/derivatives --blood_dir ~/pet_course/derivatives/bloodstream/Secondary_Analysis --analysis_foldername Lassen_Analysis
+   /neurodesktop-storage/course-material/pet/scripts/run_petfit.sh modelling_plasma --analysis_foldername Plasma_Models
    ```
 
-2. Open the app as before.
-3. On the **Data Definition** tab, choose the same participants, and all the regions that you defined. Create the analysis data, and check the report.
-4. Choose your weights and delay settings, as in the primary analysis.
-5. On the **Find t\*** tab, generate the *t*\* plots, and choose a value of *t*\*.
-6. Fit MA1 as **Model 1** and Logan as **Model 2**, using your value of *t*\*.
+   It runs the PETFit container with `--func modelling_plasma`, with `--analysis_foldername Plasma_Models`, which saves the results in their own folder, and with `--blood_dir /data/derivatives/bloodstream/Primary_Analysis`. This points PETFit to arterial input functions that were already modelled with bloodstream for the whole dataset, so that everyone works from the same input functions.
 
-The reports are in `~/pet_course/derivatives/petfit/Lassen_Analysis/reports`.
+2. Open the link that the script prints in a new browser tab.
 
-- How did you choose *t*\*?
-- How do the *V*~T~ values from MA1 and Logan compare with each other, and with the 2TCM values from your primary analysis?
+The reports are in `~/pet_course/derivatives/petfit/Plasma_Models/reports`. Open them in JupyterLab and click **Trust HTML**, or open them in the web browser on the Neurodesk **Desktop**. Also look through the other files that PETFit wrote, in `~/pet_course/derivatives/petfit`.
 
-## Surface-based analysis with PETSurfer
+### Prepare the data
 
-PETPrep can also run surface-based analyses with PETSurfer, which fits models at each point on the cortical surface instead of in regions. The PETSurfer outputs for this dataset have one report per session:
+1. On the **Data Definition** tab, restrict the analysis to three participants, `02;10;15`, and choose all the regions that you defined. Create the analysis data.
+2. Read the data definition report. Is anything wrong with the data? If so, revise your data definition and create the analysis data again.
+3. On the **Weights Definition** and **Fit Delay** tabs, choose your settings, run each step, and read its report.
 
-```bash
-/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh sub-01_ses-baseline.html
-```
+### Compartment models
 
-The script prints a link. Open it in a new browser tab. To see a list of all reports, run the script without a filename.
+1. On the **Model 1** tab, choose **1TCM**, fit the model, and read the report.
 
-- What can a surface-based analysis show that a region-based analysis can't?
-- What are the costs of working at this level of detail?
+Would you say that the model fit the data sufficiently well?
+
+2. Change **Model 1** to **2TCM**, fit the model again, and read the report.
+
+- Which model fits the data better? 
+- Are all parameters estimated well?
+- How do the *V*~T~ values change between the two scans of each participant from the blocking group? What does this tell us?
+- Compare the participants from the blocking group with the participant from the test-retest group.
+
+### Linear models
+
+Linear models are much faster to estimate than nonlinear models, and more robust to noise, though they tend to have some systematic biases. Many of them need a time point, *t*\*, after which the linear relationship holds.
+
+1. On the **Find t\*** tab, generate the *t*\* plots for the Logan plot, and choose a value of *t*\*.
+2. On the **Model 2** tab, choose **Logan**, fit it with your value of *t*\*, and read the report.
+3. On the **Model 3** tab, choose **Patlak**, fit it with a *t*\* of 40 min, and read the report. What do you conclude?
+4. Change **Model 3** to **MA1**. Check *t*\* again for MA1 on the **Find t\*** tab, then fit MA1 and read the report.
+
+- What happened with the Patlak plot? Why?
+- How did you choose *t*\* for Logan and for MA1?
+- If you have time: how do the *V*~T~ values from Logan and MA1 compare with each other, and with the 2TCM values?

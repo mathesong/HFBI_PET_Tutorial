@@ -38,18 +38,24 @@ If the Desktop has a low resolution, open the control panel at the left edge, se
 
 ## Convert the data
 
-1. Click **Select Directory**, choose `/neurodesktop-storage/course-material/pet/data/sourcedata`, and allow ezBIDS to view the files. The upload takes a few minutes.
+1. Click **Select Directory**, choose `/neurodesktop-storage/course-material/pet/data/sourcedata`, and allow ezBIDS to view the files. The "upload" (loading) takes a few minutes.
 2. Check the information that ezBIDS found about the dataset and the participants.
 3. Go through the list of scans. For each scan, check the proposed BIDS name, and correct anything that looks wrong.
-4. Add the information that the converter can't find in the DICOM files.
-5. Convert the data, and save the BIDS dataset. It stays in your Neurodesk.
+5. Add the additional sidecar information under "Edit Metadata". Is everything there? Is everything correct?
+6. Convert the data, and save the BIDS dataset. It stays in your Neurodesk.
 
 While you work, think about these questions:
 
 - How many participants does ezBIDS think there are? Is it right? What did it base that on?
 - For each PET scan, does the tracer that ezBIDS reports match the scan's series description?
 - Which information in a PET-BIDS sidecar did the scanner provide, and which did you have to add? What about the injected radioactivity?
-- Where would blood data fit in this dataset?
+- Was all the information from the image metadata correct..?
+
+Once you're done: 
+
+- How easy is it to make mistakes along the way while creating our dataset?
+- How could this be made less prone to errors?
+- How might we implement this in practice, given that we get data from many different sources?
 
 ## Backup: BIDS-Manager
 

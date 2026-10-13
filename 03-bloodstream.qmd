@@ -4,28 +4,28 @@ title: "3. Blood data with bloodstream"
 
 [bloodstream](https://github.com/mathesong/bloodstream) models arterial blood data and produces an arterial input function for each PET scan. You choose a model for each blood component in an app, and bloodstream fits the models and writes a report.
 
-You run bloodstream twice. First you run it with the default settings, and then you fit models that you choose yourself.
+You will run bloodstream twice. First with the default settings, and then you will fit models that you choose yourself.
 
 ## Start the app
 
-To keep the commands short, first save two paths in variables. If you open a new terminal, run these two lines again:
+Start bloodstream with the course script:
 
 ```bash
-DATA=/neurodesktop-storage/course-material/pet/data/ds004869
-SIF=/neurodesktop-storage/course-material/pet/containers
+/neurodesktop-storage/course-material/pet/scripts/run_bloodstream.sh
 ```
 
-Then start bloodstream:
+The script finds a free port for the app, and prints the command that it runs and the link to the app. The command is:
 
 ```bash
-cd ~/pet_course
-apptainer run -B $DATA:/data:ro $SIF/bloodstream.sif --mode interactive --bids_dir /data --derivatives_dir ~/pet_course/derivatives
+apptainer run -B /neurodesktop-storage/course-material/pet/data/ds004869:/data:ro \
+  /neurodesktop-storage/course-material/pet/containers/bloodstream.sif \
+  --mode interactive --bids_dir /data --derivatives_dir ~/pet_course/derivatives
 ```
 
 What the command does:
 
-- `apptainer run ... $SIF/bloodstream.sif` runs the bloodstream container.
-- `-B $DATA:/data:ro` makes the dataset visible inside the container as `/data`, read-only.
+- `apptainer run ... bloodstream.sif` runs the bloodstream container.
+- `-B ...ds004869:/data:ro` makes the dataset visible inside the container as `/data`, read-only.
 - `--bids_dir /data` tells bloodstream where the BIDS data are.
 - `--derivatives_dir ~/pet_course/derivatives` tells bloodstream where to write its results: your own folder.
 
@@ -36,13 +36,7 @@ You can ignore these messages:
 
 ## Open the app
 
-Wait until the terminal shows `Listening on http://0.0.0.0:3838`. Then open a new browser tab with your Neurodesk link, and replace everything after your port number with `/proxy/3838/`:
-
-```
-http://130.238.147.132:YOUR_PORT/proxy/3838/
-```
-
-The final `/` is needed. If the terminal says a different port, such as 3839, use that number instead.
+Wait until the terminal shows `Listening on`. Then open the link that the script printed in a new browser tab.
 
 ## Run a default analysis
 
@@ -51,26 +45,44 @@ The final `/` is needed. If the terminal says a different port, such as 3839, us
 
 The run takes several minutes, and its progress appears in the terminal.
 
-The results are in `~/pet_course/derivatives/bloodstream/Primary_Analysis`. Open the report, `bloodstream_report.html`, in JupyterLab, and click **Trust HTML** at the top, which turns on the interactive plots.
+The results are in `~/pet_course/derivatives/bloodstream/Primary_Analysis`. To open the report, run:
+
+```bash
+/neurodesktop-storage/course-material/pet/scripts/view_bloodstream.sh
+```
+
+The script prints a link. Open it in a new browser tab. When you are done, press Ctrl+C in the terminal.
+
+::: {.callout-tip}
+## Open reports on the Desktop
+
+You can also open the bloodstream reports in the web browser on the Neurodesk **Desktop**, without the script. On the Desktop, you can also look through all the output files that bloodstream wrote, in `~/pet_course/derivatives/bloodstream`.
+:::
 
 - What did the default settings do with each blood component?
 - Do the curves look reasonable for every participant?
+- Do any measurements look a little bit off?
 
 ## Fit models to the data
 
-Start the app again, with one extra option, `--analysis_foldername`, so that the new results go to a separate folder and don't replace the default analysis:
+Start the app again, this time with the `--analysis_foldername` option, so that the new results go to a separate folder and don't replace the default analysis:
 
 ```bash
-cd ~/pet_course
-apptainer run -B $DATA:/data:ro $SIF/bloodstream.sif --mode interactive --bids_dir /data --derivatives_dir ~/pet_course/derivatives --analysis_foldername Secondary_Analysis
+/neurodesktop-storage/course-material/pet/scripts/run_bloodstream.sh --analysis_foldername Modelled
 ```
 
-1. Open the app as before.
+The script passes any options that you add on to bloodstream.
+
+1. Open the link that the script prints, as before.
 2. Restrict the analysis to the six workshop participants: `02;05;08;11;13;14`.
-3. Choose a model for the parent fraction, the blood-to-plasma ratio, and the arterial input function. What do the options mean, and which would you choose for each?
+3. Choose a model for the parent fraction, the blood-to-plasma ratio, and the arterial input function (splines are quickest). What do the options mean, and which would you choose for each?
 4. Run the pipeline, and keep the tab open until the app closes itself.
 
-The results are in `~/pet_course/derivatives/bloodstream/Secondary_Analysis`. Open the report and click **Trust HTML**.
+The results are in `~/pet_course/derivatives/bloodstream/Modelled`. To open the report, run the view script with the name of the analysis folder:
+
+```bash
+/neurodesktop-storage/course-material/pet/scripts/view_bloodstream.sh Modelled
+```
 
 - Do the model fits look reasonable for every participant?
 - How do the results differ from the default analysis?

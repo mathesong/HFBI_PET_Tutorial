@@ -5,11 +5,9 @@ title: "Troubleshooting"
 | Problem | What to do |
 | --- | --- |
 | `Read-only file system` or `permission denied` | You tried to write inside `course-material`. Write to your home folder, `~/pet_course`, instead. |
-| The browser shows an error at `/proxy/3838/` | Check that the app says `Listening on`, that you used your own port number, and that the address ends with `/`. |
-| The app says the port is in use and picks another one | Another app is still running. Use the new port number. |
-| The plots in a report don't respond | Click **Trust HTML** at the top of the report. |
-| You can't get bloodstream or PETFit to start | As a fallback, run `/neurodesktop-storage/course-material/pet/scripts/run_bloodstream.sh`, or `/neurodesktop-storage/course-material/pet/scripts/run_petfit.sh` followed by `regiondef`, `modelling_plasma`, or `modelling_ref`. They run the same command and print the link to open. |
-| `DATA` or `SIF` seem empty | You opened a new terminal. Set the two variables again, as in [part 3](03-bloodstream.qmd#start-the-app). |
+| The browser shows an error when you open an app | Check that the terminal says `Listening on`, and that you copied the whole link that the script printed, including the final `/`. |
+| A bloodstream report has no figures or layout | You opened it in JupyterLab. Open it with `view_bloodstream.sh` instead, as in [part 3](03-bloodstream.qmd#run-a-default-analysis). |
+| The plots in a PETFit report don't respond | Click **Trust HTML** at the top of the report. |
 | ezBIDS says **Select Directory** requires Chrome or Edge, or it shows your laptop's files | You opened ezBIDS in your own browser or in Firefox. Close it, and start it with `open_ezbids.sh` in a terminal on the Desktop, as in [part 1](01-ezbids.qmd#open-ezbids). |
 | A page says "Token authentication is enabled" | This browser isn't logged in. Open your full Neurodesk link, with `?token=`, in this browser first. |
 | The terminal or the browser stops responding | The VPN may have dropped. Reconnect, and open your Neurodesk link again. Your files are kept. |

@@ -1,13 +1,17 @@
 #!/bin/bash
 # Start a PETFit app.
 # Usage:
-#   run_petfit.sh regiondef          define regions and combine the TACs
-#   run_petfit.sh modelling_plasma   kinetic modelling with your bloodstream input functions
-#   run_petfit.sh modelling_ref      kinetic modelling with a reference region
+#   run_petfit.sh regiondef         define regions and combine the TACs
+#   run_petfit.sh modelling_plasma  kinetic modelling with your bloodstream input functions
+#   run_petfit.sh modelling_ref     kinetic modelling with a reference region
+# Any extra options are passed on to PETFit, for example:
+#   run_petfit.sh modelling_plasma --analysis_foldername Plasma_Models
 # Reads the course dataset (read-only) and your own files in ~/pet_course.
-# Press Ctrl+C to stop the app.
+# Unless you give --blood_dir, the input functions come from the bloodstream
+# outputs in the course dataset (derivatives/bloodstream/Primary_Analysis).
 
 FUNC=$1
+shift
 case "$FUNC" in
   regiondef|modelling_plasma|modelling_ref) ;;
   *)
@@ -45,13 +49,19 @@ CMD=(apptainer run
   --bids_dir /data
   --derivatives_dir "$WORK/derivatives")
 
-if [ "$FUNC" = "modelling_plasma" ]; then
-  if [ ! -d "$WORK/derivatives/bloodstream" ]; then
-    echo "No bloodstream results in $WORK/derivatives. Run bloodstream first."
-    exit 1
-  fi
-  CMD+=(--blood_dir "$WORK/derivatives/bloodstream")
+# Did the user give their own --blood_dir?
+OWN_BLOOD=no
+for ARG in "$@"; do
+  case "$ARG" in --blood_dir|--blood_dir=*) OWN_BLOOD=yes ;; esac
+done
+
+# The course dataset is mounted at /data inside the container
+if [ "$FUNC" = "modelling_plasma" ] && [ "$OWN_BLOOD" = no ]; then
+  CMD+=(--blood_dir /data/derivatives/bloodstream/Primary_Analysis)
 fi
+
+# Pass on any extra options, such as --analysis_foldername
+CMD+=("$@")
 
 echo "Running:"
 echo "  ${CMD[*]}"
@@ -59,8 +69,6 @@ echo
 echo "When the app says 'Listening on', open this link in a new browser tab:"
 echo
 echo "  http://$HOST:$NDPORT/proxy/$PORT/"
-echo
-echo "Press Ctrl+C here to stop the app."
 echo
 
 "${CMD[@]}" 2>&1 | tee "$WORK/petfit_$FUNC.log"

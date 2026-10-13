@@ -359,8 +359,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-lassen.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5. Lassen plot</span></a>
+  <a href="./05-petsurfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. PETSurfer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-lassen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Lassen plot</span></a>
   </div>
 </li>
       </ul>
@@ -450,10 +456,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="convert-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="convert-the-data">Convert the data</h2>
 <ol type="1">
-<li>Click <strong>Select Directory</strong>, choose <code>/neurodesktop-storage/course-material/pet/data/sourcedata</code>, and allow ezBIDS to view the files. The upload takes a few minutes.</li>
+<li>Click <strong>Select Directory</strong>, choose <code>/neurodesktop-storage/course-material/pet/data/sourcedata</code>, and allow ezBIDS to view the files. The “upload” (loading) takes a few minutes.</li>
 <li>Check the information that ezBIDS found about the dataset and the participants.</li>
 <li>Go through the list of scans. For each scan, check the proposed BIDS name, and correct anything that looks wrong.</li>
-<li>Add the information that the converter can’t find in the DICOM files.</li>
+<li>Add the additional sidecar information under “Edit Metadata”. Is everything there? Is everything correct?</li>
 <li>Convert the data, and save the BIDS dataset. It stays in your Neurodesk.</li>
 </ol>
 <p>While you work, think about these questions:</p>
@@ -461,7 +467,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>How many participants does ezBIDS think there are? Is it right? What did it base that on?</li>
 <li>For each PET scan, does the tracer that ezBIDS reports match the scan’s series description?</li>
 <li>Which information in a PET-BIDS sidecar did the scanner provide, and which did you have to add? What about the injected radioactivity?</li>
-<li>Where would blood data fit in this dataset?</li>
+<li>Was all the information from the image metadata correct..?</li>
+</ul>
+<p>Once you’re done:</p>
+<ul>
+<li>How easy is it to make mistakes along the way while creating our dataset?</li>
+<li>How could this be made less prone to errors?</li>
+<li>How might we implement this in practice, given that we get data from many different sources?</li>
 </ul>
 </section>
 <section id="backup-bids-manager" class="level2">

@@ -1,0 +1,55 @@
+---
+title: "6. Lassen plot"
+---
+
+Celecoxib blocks COX-2, to which [11C]MC1 binds. A Lassen plot estimates how much of the target the drug occupies, using *V*~T~ from the baseline and blocked scans.
+
+For each participant and region:
+
+- *x* = *V*~T~ at baseline
+- *y* = *V*~T~ at baseline minus *V*~T~ after blocking
+
+If the drug occupies the same fraction of the target in every region, and the non-displaceable distribution volume (*V*~ND~) is the same in every region, the points fall on a straight line. The slope of the line is the occupancy, and the line crosses the *x*-axis at *V*~ND~.
+
+## The formulas
+
+*V*~T~ is the sum of non-displaceable and specific binding, *V*~T~ = *V*~ND~ + *V*~S~. The drug blocks a fraction, Occ, of the specific binding, so for each region:
+
+$$
+\Delta V_\mathrm{T} = V_\mathrm{T,base} - V_\mathrm{T,blocked} = \mathrm{Occ} \times (V_\mathrm{T,base} - V_\mathrm{ND})
+$$
+
+This is a straight line, $y = a + b\,x$, with $x = V_\mathrm{T,base}$ and $y = \Delta V_\mathrm{T}$. Fit the line with linear regression, then:
+
+- The occupancy is the slope:
+
+  $$
+  \mathrm{Occ} = b
+  $$
+
+- *V*~ND~ is where the line crosses the *x*-axis:
+
+  $$
+  V_\mathrm{ND} = -\frac{a}{b}
+  $$
+
+- The non-displaceable binding potential in each region compares specific with non-displaceable binding at baseline, i.e. the signal-to-background ratio:
+
+  $$
+  \mathit{BP}_\mathrm{ND} = \frac{V_\mathrm{T,base} - V_\mathrm{ND}}{V_\mathrm{ND}} = \frac{V_\mathrm{T,base}}{V_\mathrm{ND}} - 1
+  $$
+
+## Your task
+
+Make a Lassen plot for sub-10, and estimate the occupancy and *V*~ND~. Then use *V*~ND~ to calculate *BP*~ND~ in your regions. Use only cortical regions (binding is negligible in subcortical structures).
+
+- Use the PETFit results that come with the course data. They are in `/neurodesktop-storage/course-material/pet/data/ds004869/derivatives/petfit/Primary_Analysis`.
+- Use the *V*~T~ estimates from one of the models: you can choose. Each file has one row per scan and region, for all participants.
+- Use whatever tool you like: Python, R, a spreadsheet, or something else.
+
+## Questions
+
+
+- Considering the test-retest variation and the change, does this seem like a high BP~ND~, i.e. signal-to-background ratio?
+- What kinds of effects might best be measured using this radiotracer then?
+- Compare your estimates with others who perhaps used different model files? How similar are they?

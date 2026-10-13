@@ -1,8 +1,12 @@
 #!/bin/bash
 # Start the bloodstream app.
+# Usage:
+#   run_bloodstream.sh                                            results go to bloodstream/Primary_Analysis
+#   run_bloodstream.sh --analysis_foldername Secondary_Analysis   results go to bloodstream/Secondary_Analysis
+# Any extra options are passed on to bloodstream.
 # Reads the course dataset (read-only) and writes results to
 # ~/pet_course/derivatives/bloodstream
-# Press Ctrl+C to stop the app.
+# The app closes itself when the pipeline has finished.
 
 DATA=/neurodesktop-storage/course-material/pet/data/ds004869
 SIF=/neurodesktop-storage/course-material/pet/containers/bloodstream.sif
@@ -29,14 +33,15 @@ CMD=(apptainer run
   --bids_dir /data
   --derivatives_dir "$WORK/derivatives")
 
+# Pass on any extra options, such as --analysis_foldername
+CMD+=("$@")
+
 echo "Running:"
 echo "  ${CMD[*]}"
 echo
 echo "When the app says 'Listening on', open this link in a new browser tab:"
 echo
 echo "  http://$HOST:$NDPORT/proxy/$PORT/"
-echo
-echo "Press Ctrl+C here to stop the app."
 echo
 
 "${CMD[@]}" 2>&1 | tee "$WORK/bloodstream.log"

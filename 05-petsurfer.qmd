@@ -1,0 +1,36 @@
+---
+title: "5. Surface-based analysis with PETSurfer"
+---
+
+[PETSurfer](https://github.com/freesurfer/petsurfer-bids) does kinetic modelling at every point in the brain instead of in regions. It uses the PETPrep and bloodstream outputs, and it writes its results as BIDS derivatives. For each scan, it produces:
+
+- **Volume** maps in a standard space (MNI152)
+- **Surface** maps on the cortical surface, in a standard surface space (fsaverage)
+- **ROI** values for the FreeSurfer regions
+
+The cerebral cortex is a thin, folded sheet, so a surface-based analysis can smooth the data along the cortex without mixing in white matter and cerebrospinal fluid. It also lines up the cortex better between participants.
+
+PETSurfer has already been run on this dataset, with one report per scan.
+
+## Open a report
+
+To open a report, run:
+
+```bash
+/neurodesktop-storage/course-material/pet/scripts/view_petsurfer.sh sub-02_ses-baseline.html
+```
+
+The script prints a link. Open it in a new browser tab. When you are done, press Ctrl+C in the terminal. To see a list of all reports, run the script without a filename.
+
+To open a different report, run the script again with another filename. You can also change the filename at the end of the link in your browser.
+
+## Look through the reports
+
+Start with the baseline scan of a participant from the blocking group, such as sub-02.
+
+1. In the **Summary** section, find which model and settings were used.
+   - Which model estimated *V*~T~, and with which *t*\*?
+   - How much were the volume and the surface maps smoothed?
+2. In the **Parametric Maps** section, look at the volume and surface maps of *V*~T~.
+   - What can you see on the surface maps that's hard to see in the volume slices?
+3. Under the volume maps, click **View results in freebrowse** to explore the volume map in 3D. Loading it takes a moment.

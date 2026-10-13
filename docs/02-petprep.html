@@ -359,8 +359,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-lassen.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5. Lassen plot</span></a>
+  <a href="./05-petsurfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. PETSurfer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-lassen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Lassen plot</span></a>
   </div>
 </li>
       </ul>
@@ -381,12 +387,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#look-at-the-petprep-outputs" id="toc-look-at-the-petprep-outputs" class="nav-link active" data-scroll-target="#look-at-the-petprep-outputs">2.1 Look at the PETPrep outputs</a>
+  <li><a href="#part-1-look-at-the-petprep-outputs" id="toc-part-1-look-at-the-petprep-outputs" class="nav-link active" data-scroll-target="#part-1-look-at-the-petprep-outputs">2.1 Part 1: Look at the PETPrep outputs</a>
   <ul class="collapse">
   <li><a href="#the-reports" id="toc-the-reports" class="nav-link" data-scroll-target="#the-reports">The reports</a></li>
   <li><a href="#the-output-files" id="toc-the-output-files" class="nav-link" data-scroll-target="#the-output-files">The output files</a></li>
   </ul></li>
-  <li><a href="#explore-the-petprep-options" id="toc-explore-the-petprep-options" class="nav-link" data-scroll-target="#explore-the-petprep-options">2.2 Explore the PETPrep options</a></li>
+  <li><a href="#part-2-explore-the-petprep-options" id="toc-part-2-explore-the-petprep-options" class="nav-link" data-scroll-target="#part-2-explore-the-petprep-options">2.2 Part 2: Explore the PETPrep options</a></li>
   </ul>
 </nav>
     </div>
@@ -414,27 +420,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="https://github.com/nipreps/petprep">PETPrep</a> preprocesses PET data. It corrects for head motion, registers the PET images to the participant’s MRI, and extracts time-activity curves (TACs) from FreeSurfer regions. A full run takes hours per participant, so you look at outputs that have already been computed for this dataset.</p>
-<section id="look-at-the-petprep-outputs" class="level2">
-<h2 class="anchored" data-anchor-id="look-at-the-petprep-outputs">2.1 Look at the PETPrep outputs</h2>
+<section id="part-1-look-at-the-petprep-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-look-at-the-petprep-outputs">2.1 Part 1: Look at the PETPrep outputs</h2>
 <section id="the-reports" class="level3">
 <h3 class="anchored" data-anchor-id="the-reports">The reports</h3>
 <p>PETPrep writes one HTML report per participant. To open a report, run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/view_petprep.sh</span> sub-01.html</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/neurodesktop-storage/course-material/pet/scripts/view_petprep.sh</span> sub-XX.html <span class="co"># choose a subject</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The script prints a link. Open it in a new browser tab. When you are done, press Ctrl+C in the terminal. To see a list of all reports, run the script without a filename.</p>
-<p>While you read the reports, think about these questions:</p>
-<ul>
-<li>How would you check that the PET-to-MRI registration worked?</li>
-<li>What do the motion estimates tell you?</li>
-<li>Which outputs would you use for kinetic modelling?</li>
-</ul>
+<p>While you look through the reports, think about whether you would accept each step of the pipeline.</p>
 </section>
 <section id="the-output-files" class="level3">
 <h3 class="anchored" data-anchor-id="the-output-files">The output files</h3>
-<p>The outputs are in <code>~/pet_course/derivatives/petprep</code>. Open one participant’s folder. For example, find the TAC file <code>sub-01_ses-baseline_desc-preproc_seg-gtm_tacs.tsv</code> and open it in JupyterLab. What do the rows and columns contain?</p>
+<p>Explore the outputs in <code>~/pet_course/derivatives/petprep</code>. Open one participant’s folder. For example, find the TAC file <code>sub-01_ses-baseline_desc-preproc_seg-gtm_tacs.tsv</code> and open it in JupyterLab.</p>
+<p>(the image files are unfortunately empty to save on disk space)</p>
 </section>
 </section>
-<section id="explore-the-petprep-options" class="level2">
-<h2 class="anchored" data-anchor-id="explore-the-petprep-options">2.2 Explore the PETPrep options</h2>
+<section id="part-2-explore-the-petprep-options" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-explore-the-petprep-options">2.2 Part 2: Explore the PETPrep options</h2>
+<p>Stop when you get here. This exercise is performed with slides, where you will propose which option might resolve the issue.</p>
 <p>You don’t run PETPrep in this workshop. Instead, you install <code>petprep-docker</code>, a Python wrapper that builds the full command to run PETPrep in a container, and you explore its options.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--user</span> petprep-docker</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">petprep-docker</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
